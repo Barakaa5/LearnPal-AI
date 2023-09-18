@@ -1,0 +1,36 @@
+{
+    "extends": [
+      "next/core-web-vitals",
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react-hooks/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "react", "react-hooks"],
+    "root": true,
+    "rules": {
+      "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+      "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+      "no-console": ["error", { "allow": ["warn", "error"] }],
+      "no-restricted-imports": [
+        "error",
+        {
+          "patterns": ["@/features/*/*"]
+        }
+      ],
+      // suppress errors for missing 'import React' in files
+      "react/react-in-jsx-scope": "off",
+      "react/no-unescaped-entities": "off",
+      "react/prop-types": "off", // no need since using typescript
+      // allow jsx syntax in js files (for next.js project)
+      "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }], //should add ".ts" if typescript project
+      "curly": "error",
+      "no-var": "warn",
+      "@typescript-eslint/ban-types": "warn",
+  
+      // Warn about unused variables, but don't raise an error
+      "no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": "warn"
+    }
+  }

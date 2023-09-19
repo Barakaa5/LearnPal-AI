@@ -1,10 +1,10 @@
+import { FirestoreAdapter } from '@next-auth/firebase-adapter';
 import type { NextAuthOptions, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { FirestoreAdapter } from '@next-auth/firebase-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 
-import { Adapter } from 'next-auth/adapters';
 import { cert } from 'firebase-admin/app';
+import { Adapter } from 'next-auth/adapters';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -52,9 +52,10 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
     async jwt({ token, user, account, profile }) {
-
       return token;
     },
   },
-
+  pages: {
+    signIn: '/',
+  },
 };

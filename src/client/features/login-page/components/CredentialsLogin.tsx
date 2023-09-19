@@ -9,8 +9,6 @@ const CredentialsLogin = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log(email, password);
-
     // Call signIn with the credentials provider
     signIn('credentials', {
       redirect: true, // Set to true to enable automatic redirection

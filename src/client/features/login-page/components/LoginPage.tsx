@@ -1,43 +1,20 @@
 'use client';
-import { Stack, Typography, useTheme } from '@mui/material';
+import { Box, Stack } from '@mantine/core';
 import CredentialsLogin from './CredentialsLogin';
 import GoogleButton from './GoogleButton';
 
 export default function LoginPage() {
-  const theme = useTheme();
   return (
-    <Stack
-      direction="row"
-      alignItems={'center'}
-      height={'100vh'}
-      sx={{ backgroundColor: theme.palette.primary.main }}
-      justifyContent="space-between"
-    >
-      <Stack width={'100%'} alignItems={'center'}>
-        <Typography
-          variant="h2"
-          color={'#FFFFFF'}
-          align={'center'}
-          marginBottom={'12px'}
-        >
+    <Stack h={'100vh'}>
+      <Stack w={'100%'}>
+        <Box variant="h2" color={'#FFFFFF'}>
           Login
-        </Typography>
-        <Typography
-          variant="h6"
-          color={'rgba(255, 255, 255, 0.7)'}
-          marginBottom={'48px'}
-        >
+        </Box>
+        <Box variant="h6" color={'rgba(255, 255, 255, 0.7)'}>
           Enter your account details
-        </Typography>
+        </Box>
         <CredentialsLogin />
         <GoogleButton />
-      </Stack>
-      <Stack
-        width={'100%'}
-        height={'100vh'}
-        sx={{ backgroundColor: theme.palette.secondary.main }}
-      >
-        Hello World
       </Stack>
     </Stack>
   );

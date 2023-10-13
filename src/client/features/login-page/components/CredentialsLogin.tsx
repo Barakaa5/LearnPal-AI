@@ -1,13 +1,16 @@
-import { Button, FormControl, Stack, TextField } from '@mui/material';
+import { Button, Stack, TextInput } from '@mantine/core';
 import { signIn } from 'next-auth/react';
+import { FormEvent, useState } from 'react';
 
 const CredentialsLogin = () => {
-  const handleSubmit = async (e) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Get the user's input values
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    const email = '';
+    const password = '';
 
     // Call signIn with the credentials provider
     signIn('credentials', {
@@ -17,24 +20,28 @@ const CredentialsLogin = () => {
     });
   };
   return (
-    <Stack sx={{ mb: '10px' }}>
-      <FormControl sx={{ mb: '48px' }} onSubmit={handleSubmit}>
-        <TextField
+    <Stack mb={10}>
+      <form onSubmit={handleSubmit}>
+        <TextInput
           id="standard-email-input"
           label="Email"
           type="email"
           variant="standard"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        <TextField
+        <TextInput
           id="standard-password-input"
           label="Password"
           type="password"
           variant="standard"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button
           variant="outlined"
           type="submit"
-          sx={{
+          style={{
             bgcolor: '#9C6FE4',
             color: 'white',
             borderRadius: '10px',
@@ -51,7 +58,7 @@ const CredentialsLogin = () => {
         >
           Login
         </Button>
-      </FormControl>
+      </form>
     </Stack>
   );
 };

@@ -7,7 +7,7 @@ import { authOptions } from './api/auth/[...nextauth]/options';
 
 export const metadata = {
   title: 'Syllabus.ai',
-  description: 'I have followed setup instructions carefully',
+  description: 'I have followed setup instructions carefully ',
 };
 
 export default async function RootLayout({ children }) {

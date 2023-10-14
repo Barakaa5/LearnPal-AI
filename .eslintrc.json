@@ -26,7 +26,7 @@
     "react/no-unescaped-entities": "off",
     "react/prop-types": "off", // no need since using typescript
     // allow jsx syntax in js files (for next.js project)
-    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }], //should add ".ts" if typescript project
+    "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx", ".jsx", ".js"] }], //should add ".ts" if typescript project
     "curly": "error",
     "no-var": "warn",
     "@typescript-eslint/ban-types": "warn",

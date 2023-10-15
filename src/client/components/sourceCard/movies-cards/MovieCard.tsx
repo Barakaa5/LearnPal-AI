@@ -1,15 +1,14 @@
 import { Button, Card, Divider, Image, Stack, Text } from '@mantine/core';
-import { UdemyCourseType } from '@type/online-courses/udemy';
-import dayjs from 'dayjs';
+import { OmdbMovieType } from '@type/movies/omdb';
 
-const UdemyCourseCard = ({ course }: { course: UdemyCourseType }) => {
+const MovieCard = ({ movie }: { movie: OmdbMovieType }) => {
   return (
     <Card shadow="xs" padding="md" radius="xl" w={300} withBorder>
       <Card.Section>
         <Image
-          src={course.image}
+          src={movie.Poster}
           height={140}
-          alt={course.title}
+          alt={movie.Title}
           radius="xl"
           style={{
             borderEndEndRadius: 0,
@@ -19,36 +18,30 @@ const UdemyCourseCard = ({ course }: { course: UdemyCourseType }) => {
       </Card.Section>
 
       <Text size="xs" m="auto" mt={10} fw={700}>
-        {course.title}
+        {movie.Title} ({movie.Year})
       </Text>
-      <Text size="xs" c="dimme" m="auto" my={10}>
-        by {course.author.name}
+      <Text size="xs" c="dimmed" m="auto" my={10}>
+        Directed by {movie.Director}
       </Text>
 
       <Divider />
 
       <Stack gap={5} py={20} px={5}>
         <Text size="xs">
-          <strong>Created:</strong> {dayjs(course.created).format('DD/MM/YYYY')}
+          <strong>Genre:</strong> {movie.Genre}
         </Text>
         <Text size="xs">
-          <strong>Average Rating:</strong> {course.avg_rating.toFixed(3)}
+          <strong>Actors:</strong> {movie.Actors}
         </Text>
         <Text size="xs">
-          <strong>Reviews:</strong> {course.num_reviews}
-        </Text>
-        <Text size="xs">
-          <strong>Subscribers:</strong> {course.num_subscribers}
-        </Text>
-        <Text size="xs">
-          <strong>Language:</strong> {course.locale}
+          <strong>IMDb Rating:</strong> {movie.imdbRating}
         </Text>
       </Stack>
 
       <Divider />
 
       <Text size="sm" c="dimmed" my={10}>
-        {course.description?.slice(0, 100)}...
+        {movie.Plot}
       </Text>
 
       <Divider />
@@ -60,13 +53,13 @@ const UdemyCourseCard = ({ course }: { course: UdemyCourseType }) => {
         mt="md"
         radius="xl"
         component="a"
-        href={'https://www.udemy.com' + course.url}
+        href={`https://www.imdb.com/title/${movie.imdbID}`}
         target="_blank"
       >
-        Go to course
+        View on IMDb
       </Button>
     </Card>
   );
 };
 
-export default UdemyCourseCard;
+export default MovieCard;

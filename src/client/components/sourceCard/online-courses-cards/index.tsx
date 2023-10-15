@@ -1,5 +1,5 @@
-import { UdemyCourseType } from '@client/types/online-courses/udemy';
 import { Group, Stack, Text } from '@mantine/core';
+import { UdemyCourseType } from '@type/online-courses/udemy';
 import UdemyCourseCard from './OnlineCourseCard';
 
 const OnlineCoursesCards = ({ courses }: { courses: UdemyCourseType[] }) => {

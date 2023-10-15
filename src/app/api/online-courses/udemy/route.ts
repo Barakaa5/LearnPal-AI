@@ -1,17 +1,16 @@
 import { getAllCourses } from '@server/online-courses/udemy/utils';
 
 export async function GET(request: Request) {
-  // get 'searchterm' param from request
-
-  const { searchParams } = new URL(request.url);
-  const searchTerm = searchParams.get('searchterm');
+  const url = new URL(request.url); // Assuming your server is running on http://localhost:3000
+  const subject = url.searchParams.get('subject');
+  if (!subject) {
+    return Response.json([]);
+  }
 
   const fieldsParameterForTheAIALgo =
     'fields[course]=title,headline,price,url,image_480x270,created,visible_instructors,avg_rating,num_reviews,num_subscribers,locale,description';
 
-  const searchText = 'physics';
-
-  const courses = await getAllCourses(fieldsParameterForTheAIALgo, searchText);
+  const courses = await getAllCourses(fieldsParameterForTheAIALgo, subject);
 
   return Response.json(courses);
 

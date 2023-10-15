@@ -3,6 +3,9 @@ import { GoogleBookType } from '@type/books/google-books';
 import dayjs from 'dayjs';
 
 const GoogleBookCard = ({ book }: { book: GoogleBookType }) => {
+  const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(
+    `${book?.title} ${book?.authors}`
+  )}`;
   return (
     <Card shadow="xs" padding="md" radius="xl" w={300}>
       <Card.Section>
@@ -41,12 +44,22 @@ const GoogleBookCard = ({ book }: { book: GoogleBookType }) => {
       <Divider />
 
       <Text size="sm" c="dimmed" my={10}>
-        {book?.description.slice(0, 100)}...
+        {book?.description?.slice(0, 100)}...
       </Text>
 
       <Divider />
 
-      <Button variant="outline" color="blue" fullWidth mt="md" radius="xl">
+      <Button
+        variant="outline"
+        color="blue"
+        fullWidth
+        mt="md"
+        radius="xl"
+        component="a"
+        href={googleSearchUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         More Info
       </Button>
     </Card>

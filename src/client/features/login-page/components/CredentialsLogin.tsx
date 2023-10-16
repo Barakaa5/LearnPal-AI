@@ -8,15 +8,10 @@ const CredentialsLogin = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Get the user's input values
-    const email = '';
-    const password = '';
-
-    // Call signIn with the credentials provider
     signIn('credentials', {
-      redirect: true, // Set to true to enable automatic redirection
       email,
       password,
+      callbackUrl: `http://localhost:3000/dashboard`, // Redirect to /dashboard after sign-in
     });
   };
   return (

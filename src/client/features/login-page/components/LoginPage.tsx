@@ -11,6 +11,8 @@ export default function LoginPage() {
         w={'33%'}
         style={(theme) => ({
           backgroundColor: theme.colors.lightPurple,
+          borderEndEndRadius: '50px',
+          borderStartEndRadius: '50px',
         })}
       >
         <Box

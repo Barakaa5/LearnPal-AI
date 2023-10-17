@@ -14,12 +14,13 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useState } from 'react';
 
 export default function LoginPage() {
+  const heroImageUrl =
+    'https://images.unsplash.com/photo-1588702547954-4800ead296ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3553&q=80';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,11 +34,7 @@ export default function LoginPage() {
     });
   };
   return (
-    <Box
-      style={{
-        display: 'flex',
-      }}
-    >
+    <Box display={'flex'}>
       <Box
         h={'100vh'}
         w={'33%'}
@@ -48,7 +45,7 @@ export default function LoginPage() {
         })}
       >
         <BackgroundImage
-          src="https://images.unsplash.com/photo-1588702547954-4800ead296ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3553&q=80"
+          src={heroImageUrl}
           style={{
             borderEndEndRadius: '50px',
             borderStartEndRadius: '50px',
@@ -57,30 +54,18 @@ export default function LoginPage() {
           h={'100vh'}
           w={'100%'}
         >
-          <Center
-            style={{
-              height: '100%',
-            }}
-            p="md"
-          >
+          <Center h={'100%'} p="md">
             <Title c={'white'} order={1}>
               {/* What do you wish to learn today? */}
             </Title>
           </Center>
         </BackgroundImage>
       </Box>
-      <Stack
-        h={'100vh'}
-        w={'67%'}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <Stack h={'100vh'} w={'67%'} display={'flex'} align="center">
         <Box
+          w={'100%'}
+          display={'flex'}
           style={{
-            width: '100%',
-            display: 'flex',
             padding: '10px 20px 0 0',
             justifyContent: 'flex-end',
           }}
@@ -96,19 +81,13 @@ export default function LoginPage() {
             Syllabus.ai
           </Text>
         </Box>
-        <Stack
-          style={{
-            height: '70%',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+        <Stack h={'70%'} align="center">
           <Box style={{ marginBottom: '70px' }} variant="h2">
             <Title
               style={{
                 margin: 'auto',
-                width: 'fit-content',
               }}
+              w={'fit-content'}
               order={1}
             >
               Log In
@@ -147,20 +126,14 @@ export default function LoginPage() {
             size="xl"
             style={(theme) => ({
               backgroundColor: theme.colors.purple,
-              width: '210px',
             })}
+            w={'210px'}
             onClick={handleSubmit}
             loading={isLoading}
           >
             Login
           </Button>
-          <Group
-            style={{
-              width: '210px',
-              gap: 'unset',
-              justifyContent: 'space-between',
-            }}
-          >
+          <Group w={'210px'} justify="space-between">
             <ActionIcon
               onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
               variant="transparent"
@@ -190,14 +163,6 @@ export default function LoginPage() {
               <Image src={AppleIcon} alt="GoogleIcon" width={36} height={36} />
             </ActionIcon>
           </Group>
-          <Button
-            leftSection={<IconPlus size={20} />}
-            color="black"
-            variant="transparent"
-            size="md"
-          >
-            Create Account
-          </Button>
         </Stack>
       </Stack>
     </Box>

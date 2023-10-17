@@ -7,6 +7,7 @@ import {
   BackgroundImage,
   Box,
   Button,
+  Center,
   Group,
   Stack,
   Text,
@@ -41,21 +42,32 @@ export default function LoginPage() {
         h={'100vh'}
         w={'33%'}
         style={(theme) => ({
-          backgroundColor: theme.colors.lightPurple,
+          backgroundColor: theme.colors.purple,
           borderEndEndRadius: '50px',
           borderStartEndRadius: '50px',
         })}
       >
         <BackgroundImage
-          src="https://images.unsplash.com/photo-1697213825057-10356bfc8713?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3571&q=80"
+          src="https://images.unsplash.com/photo-1588702547954-4800ead296ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3553&q=80"
           style={{
             borderEndEndRadius: '50px',
             borderStartEndRadius: '50px',
-            opacity: '0.5',
+            opacity: '0.3',
           }}
           h={'100vh'}
           w={'100%'}
-        ></BackgroundImage>
+        >
+          <Center
+            style={{
+              height: '100%',
+            }}
+            p="md"
+          >
+            <Title c={'white'} order={1}>
+              {/* What do you wish to learn today? */}
+            </Title>
+          </Center>
+        </BackgroundImage>
       </Box>
       <Stack
         h={'100vh'}

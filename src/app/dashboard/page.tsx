@@ -7,6 +7,7 @@ import { Avatar, Button, Group, Stack, Text, TextInput } from '@mantine/core';
 import { GoogleBookType } from '@type/books/google-books';
 import { OmdbMovieType } from '@type/movies/omdb';
 import { UdemyCourseType } from '@type/online-courses/udemy';
+import { promptForInitialUserInput } from '@utils/prompt-utils';
 import axios from 'axios';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -21,21 +22,33 @@ export default function Dashboard() {
   const handleOnClick = async () => {
     setButtonClicked(true);
     try {
+      const initialPrompt = promptForInitialUserInput(subject);
+
+      const palmResponse = await axios.post(
+        `http://localhost:3000/api/plamLLM`,
+        {
+          prompt: initialPrompt,
+        }
+      );
+
+      const { moviesSubject, booksSubject, onlineCoursesSubject } =
+        palmResponse.data;
+
       const [coursesResponse, booksResponse, moviesResponse] =
         await Promise.all([
           axios.get(`http://localhost:3000/api/online-courses/udemy`, {
             params: {
-              subject: subject,
+              subject: onlineCoursesSubject,
             },
           }),
           axios.get(`http://localhost:3000/api/books/google-books`, {
             params: {
-              subject: subject,
+              subject: booksSubject,
             },
           }),
           axios.get(`http://localhost:3000/api/movies/OMDB`, {
             params: {
-              subject: subject,
+              subject: moviesSubject,
             },
           }),
         ]);

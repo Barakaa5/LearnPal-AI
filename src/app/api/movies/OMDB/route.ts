@@ -49,7 +49,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url); // Assuming your server is running on http://localhost:3000
   const subject = url.searchParams.get('subject');
 
-  const moviesPrompt = `Give me the 5 best movies on the subject of '${subject}', 3 feature films, and 2 documentary films or shows, from 2000 and above. Return a JSON with this format: ['movie title 1','movie title 2',...]`;
+  const moviesPrompt = `Give me the 5 best movies on the subject of '${subject}': 3 feature films, and 2 documentary films or shows, from 2000 and above. Return a JSON with this format: ['feature films title 1','feature films title 2','feature films title 3','Documentary film or show 1','Documentary film or show 2']`;
   const palmAnswer = await askPalmLLM(moviesPrompt);
 
   if (!palmAnswer) {

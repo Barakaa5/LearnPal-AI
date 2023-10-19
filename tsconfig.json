@@ -30,6 +30,14 @@
     "sourceMap": true,
     "outDir": "dist"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/client/features/login-page/components/LoginPage.tsx", "src/app/layout.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "additional.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/client/features/login-page/components/LoginPage.tsx",
+    "src/app/layout.jsx"
+  ],
   "exclude": ["node_modules"]
 }

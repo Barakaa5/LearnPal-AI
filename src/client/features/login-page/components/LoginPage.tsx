@@ -16,7 +16,7 @@ import {
 } from '@mantine/core';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export default function LoginPage() {
   const heroImageUrl =

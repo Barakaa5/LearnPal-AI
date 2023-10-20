@@ -1,4 +1,4 @@
-import { fetchBooksFromGooleBooks } from '@server/books/google-books/utils';
+import { fetchPodcastsFromListenNotes } from '@server/podcasts/listen-notes';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -7,6 +7,6 @@ export async function GET(request: Request) {
     return Response.json([]);
   }
 
-  const booksResults = await fetchBooksFromGooleBooks(subject);
-  return Response.json(booksResults);
+  const podcastResults = await fetchPodcastsFromListenNotes(subject);
+  return Response.json(podcastResults);
 }

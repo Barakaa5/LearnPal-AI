@@ -3,12 +3,11 @@
 import BooksCards from '@client/components/sourceCard/books-cards';
 import MoviesCards from '@client/components/sourceCard/movies-cards';
 import OnlineCoursesCards from '@client/components/sourceCard/online-courses-cards';
+import { getAllSourcesResults, getAllSourcesSubjects } from '@client/utils';
 import { Avatar, Button, Group, Stack, Text, TextInput } from '@mantine/core';
 import { GoogleBookType } from '@type/books/google-books';
 import { OmdbMovieType } from '@type/movies/omdb';
 import { UdemyCourseType } from '@type/online-courses/udemy';
-import { promptForInitialUserInput } from '@utils/prompts/prompt-utils';
-import axios from 'axios';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 export default function Dashboard() {
@@ -22,41 +21,15 @@ export default function Dashboard() {
   const handleOnClick = async () => {
     setButtonClicked(true);
     try {
-      const initialPrompt = promptForInitialUserInput(subject);
-
-      const palmResponse = await axios.post(
-        `http://localhost:3000/api/plamLLM`,
-        {
-          prompt: initialPrompt,
-        }
-      );
-      console.log('palmResponse', palmResponse.data);
-
       const { moviesSubject, booksSubject, onlineCoursesSubject } =
-        palmResponse.data;
+        await getAllSourcesSubjects(subject);
 
-      const [coursesResponse, booksResponse, moviesResponse] =
-        await Promise.all([
-          axios.get(`http://localhost:3000/api/online-courses/udemy`, {
-            params: {
-              subject: onlineCoursesSubject,
-            },
-          }),
-          axios.get(`http://localhost:3000/api/books/google-books`, {
-            params: {
-              subject: booksSubject,
-            },
-          }),
-          axios.get(`http://localhost:3000/api/movies/OMDB`, {
-            params: {
-              subject: moviesSubject,
-            },
-          }),
-        ]);
-
-      const onlineCourses = coursesResponse.data;
-      const googleBooks = booksResponse.data;
-      const omdbMovies = moviesResponse.data;
+      const { onlineCourses, googleBooks, omdbMovies } =
+        await getAllSourcesResults({
+          moviesSubject,
+          booksSubject,
+          onlineCoursesSubject,
+        });
 
       setCourses(onlineCourses);
       setBooks(googleBooks);
@@ -89,7 +62,7 @@ export default function Dashboard() {
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
-        <Button onClick={handleOnClick} loading={buttonClicked} w={200}>
+        <Button onClick={handleOnClick} loading={buttonClicked}>
           search{' '}
         </Button>
       </Group>

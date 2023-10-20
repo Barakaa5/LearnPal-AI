@@ -7,7 +7,7 @@ import { Avatar, Button, Group, Stack, Text, TextInput } from '@mantine/core';
 import { GoogleBookType } from '@type/books/google-books';
 import { OmdbMovieType } from '@type/movies/omdb';
 import { UdemyCourseType } from '@type/online-courses/udemy';
-import { promptForInitialUserInput } from '@utils/prompt-utils';
+import { promptForInitialUserInput } from '@utils/prompts/prompt-utils';
 import axios from 'axios';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -30,6 +30,7 @@ export default function Dashboard() {
           prompt: initialPrompt,
         }
       );
+      console.log('palmResponse', palmResponse.data);
 
       const { moviesSubject, booksSubject, onlineCoursesSubject } =
         palmResponse.data;
@@ -88,7 +89,7 @@ export default function Dashboard() {
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
         />
-        <Button onClick={handleOnClick} loading={buttonClicked}>
+        <Button onClick={handleOnClick} loading={buttonClicked} w={200}>
           search{' '}
         </Button>
       </Group>

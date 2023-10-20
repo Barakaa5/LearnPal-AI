@@ -1,24 +1,3 @@
-// export const promptForInitialUserInput = (userInput: string) => {
-//   const prompt = `User's input: ${userInput}
-
-// Your task is to analyze the user's input and suggest the most relevant subjects for finding content from external APIs related to movies, books, and online courses. The goal is to enhance the user's experience by guiding them towards enriching and useful resources, even if their initial query needs some refinement.
-
-// Consider the context and intent behind the user's request, and also take into account the user's level of knowledge and understanding. For example, if the user's input appears to be from a beginner, focus on suggesting subjects suitable for newcomers in the context of books.
-
-// Your recommendations should be formatted as follows:
-
-// {
-//   "moviesSubject": "<suggested_subject>",
-//   "booksSubject": "<suggested_subject>",
-//   "onlineCoursesSubject": "<suggested_subject>"
-// }
-
-// For books, prioritize subjects that are accessible to beginners, while for movies and online courses, aim to closely align with the user's expressed interest. Additionally, explore related fields that can provide a more comprehensive understanding of the topic.
-
-// Please provide thoughtful and relevant suggestions to ensure the user's query leads to valuable content.`;
-//   return prompt;
-// };
-
 export const promptForInitialUserInput = (userInput: string) => {
   const prompt = `Based on the user's input: "${userInput}", you are tasked with analyzing and understanding the general subject the user wants to study, as well as gauging their level of expertise or understanding in the topic.
 
@@ -60,6 +39,29 @@ Example 3: User Input - "Looking to advance my skills in web development, focusi
   "booksSubject": "Advanced React",
   "onlineCoursesSubject": "React for Experienced Developers"
 }`;
+
+  return prompt;
+};
+
+export const getMoviesPrompt = (subject: string) => {
+  const prompt = `Based on the subject '${subject}', curate a list of movies and shows that deeply resonate with this topic, ensuring they are insightful and enrich the viewer's understanding and appreciation of the subject. Consider movies and shows from the year 2000 onwards.
+
+Your response should exclusively be a JSON array, containing:
+- First three entries: Titles of feature films that are creatively engaging and illustrative of the subject.
+- Last two entries: Titles of documentaries or educational shows that offer factual, in-depth exploration of the subject.
+
+Here are some examples to guide your curation:
+
+- If the subject is "Artificial Intelligence":
+  ["A.I. Artificial Intelligence", "Ex Machina", "Her", "The Social Dilemma", "AlphaGo"]
+
+- If the subject is "Environmental Conservation":
+  ["Avatar", "The Day After Tomorrow", "Wall-E", "An Inconvenient Truth", "Planet Earth II"]
+
+- If the subject is "Historical Wars":
+  ["Gladiator", "Saving Private Ryan", "300", "The World at War", "Band of Brothers"]
+
+Remember, your output should strictly be the JSON array with movie and show titles relevant to the subject, without additional text or explanation.`;
 
   return prompt;
 };

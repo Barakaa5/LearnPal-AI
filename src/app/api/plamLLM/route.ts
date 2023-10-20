@@ -1,4 +1,4 @@
-import { askPalmLLM } from '@client/utils/palmLLM';
+import { askPalmLLM } from '@server/palmLLM';
 
 export async function POST(request: Request) {
   const { prompt } = await request.json();

@@ -24,14 +24,19 @@ export default function Dashboard() {
   const handleOnClick = async () => {
     setButtonClicked(true);
     try {
-      const { moviesSubject, booksSubject, onlineCoursesSubject } =
-        await getAllSourcesSubjects(subject);
+      const {
+        moviesSubject,
+        booksSubject,
+        onlineCoursesSubject,
+        podcastsSubject,
+      } = await getAllSourcesSubjects(subject);
 
       const { onlineCourses, googleBooks, omdbMovies, podcasts } =
         await getAllSourcesResults({
           moviesSubject,
           booksSubject,
           onlineCoursesSubject,
+          podcastsSubject,
         });
 
       setCourses(onlineCourses);

@@ -33,12 +33,15 @@ const PodcastCard = ({ podcast }: { podcast: PodcastType }) => {
           <strong>Explicit Content:</strong>{' '}
           {podcast.explicit_content ? 'Yes' : 'No'}
         </Text>
+        <Text size="xs">
+          <strong>Listening Time:</strong> {podcast.audio_length_sec} Seconds
+        </Text>
       </Stack>
 
       <Divider />
 
       <Text size="sm" c="dimmed" my={10}>
-        {podcast.description_original}
+        {podcast.description_original.slice(0, 100)}...
       </Text>
 
       <Divider />

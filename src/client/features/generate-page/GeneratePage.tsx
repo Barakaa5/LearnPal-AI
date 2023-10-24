@@ -15,7 +15,9 @@ import {
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import Image from 'next/image';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import Navbar from '../../components/Navbar/Navbar';
 
 const SuggestionCard = ({ subject, imgSrc }) => {
   const theme = useMantineTheme();
@@ -25,7 +27,7 @@ const SuggestionCard = ({ subject, imgSrc }) => {
         <Text size="26px" fw={'900'}>
           {subject}
         </Text>
-        <Image width={'64'} height={'64'} src={imgSrc} />
+        <Image alt="subject-icon" width={'64'} height={'64'} src={imgSrc} />
         <Button variant="outline" color={theme.colors.purple[0]}>
           Try!
         </Button>
@@ -36,44 +38,11 @@ const SuggestionCard = ({ subject, imgSrc }) => {
 
 export default function GeneratePage() {
   const theme = useMantineTheme();
+  const [input, setInput] = useState('');
+  const router = useRouter();
   return (
     <Stack align="center" h={'100vh'} gap={'0'}>
-      <Group
-        w={'100%'}
-        justify="space-between"
-        h={'60px'}
-        pl={'40'}
-        pr={'40'}
-        mb={'40px'}
-      >
-        <Text
-          style={(theme) => ({
-            color: theme.colors.purple,
-          })}
-          size="lg"
-          fw={700}
-        >
-          Syllabus.ai
-        </Text>
-        <Group>
-          <Button color="black" variant="transparent">
-            Generate
-          </Button>
-          <Button color="black" variant="transparent">
-            Explore
-          </Button>
-          <Button disabled color="black" variant="transparent">
-            Blog
-          </Button>
-          <Button color="black" variant="transparent">
-            About
-          </Button>
-        </Group>
-        <Group>
-          <Button color={theme.colors.purple[0]}>Log In</Button>
-          {/* <Button>Sign Up</Button> */}
-        </Group>
-      </Group>
+      <Navbar />
       <Box w={'100%'} pl={'40px'} pr={'40px'} mb={'20px'}>
         <BackgroundImage
           h={'300px'}
@@ -85,6 +54,8 @@ export default function GeneratePage() {
               What do you wish to learn today?
             </Text>
             <TextInput
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
               radius="xl"
               size="l"
               w={'300px'}
@@ -96,6 +67,7 @@ export default function GeneratePage() {
                   radius="xl"
                   color={theme.colors.purple[0]}
                   variant="filled"
+                  onClick={() => router.push(`/content/${input}`)}
                 >
                   <IconSearch
                     style={{ width: rem(18), height: rem(18) }}

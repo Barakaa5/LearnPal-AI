@@ -16,7 +16,7 @@ import {
 } from '@mantine/core';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function LoginPage() {
   const heroImageUrl =
@@ -135,7 +135,7 @@ export default function LoginPage() {
           </Button>
           <Group w={'210px'} justify="space-between">
             <ActionIcon
-              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+              onClick={() => signIn('google', { callbackUrl: '/generate' })}
               variant="transparent"
               size={'xl'}
             >

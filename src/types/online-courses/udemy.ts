@@ -16,4 +16,5 @@ export type UdemyCourseType = {
   locale: string;
   description: string;
   headline: string;
+  reviews?: string[];
 };

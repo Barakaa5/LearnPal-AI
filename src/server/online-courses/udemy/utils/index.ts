@@ -1,3 +1,4 @@
+import { UdemyCourseType } from '@type/online-courses/udemy';
 import { UdemyCourseReviewsResponse, UdemyCoursesResponse } from '../types';
 
 const API_KEY =
@@ -55,7 +56,7 @@ export const getAllCourses = async (
     return rankB - rankA; // to sort in descending order
   });
 
-  return sortedCourses;
+  return sortedCourses as UdemyCourseType[];
 };
 
 export const cleanText = (text: string) => {

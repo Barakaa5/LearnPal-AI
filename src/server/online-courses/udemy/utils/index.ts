@@ -1,5 +1,9 @@
+import { UdemyCourseReviewsResponse, UdemyCoursesResponse } from '../types';
+
 const API_KEY =
   'fWPtIrK9VNJfxU7WkEaj2glNgE019YbM4i3uaKl0:PURymL5Ii0Ln865psrK5ZkuQhClwmpslsdv2mmJxxXphuljWbZEB7uGWmqdye2Ot7ydF5DsLjGK6w8aT8OPnzYmLouHB1oeAUx6mK2FPHneErPxBjYoWcrIwLCboKZpS'; // Replace with your Udemy API key
+
+const PAGE_SIZE = 6;
 
 export const getAllCourses = async (
   fieldsParameter: string,
@@ -12,7 +16,7 @@ export const getAllCourses = async (
 
   const firstPageData = await fetchPage(firstPageUrl);
 
-  const parsedCourses = firstPageData.results.map((course: any) => ({
+  const parsedCourses = firstPageData.results.map((course) => ({
     id: course?.id,
     created: course?.created,
     url: course?.url,
@@ -61,15 +65,13 @@ export const cleanText = (text: string) => {
   // Remove HTML tags and entities using a regular expression
   const strippedText = text.replace(/<[^>]*>|&[^;]+;/g, '');
 
-  // Remove unwanted characters like '***' and '\"'
-  const cleanedText = strippedText.replace(/[\"*]+/g, '');
+  // Remove unwanted characters like '***' and '"'
+  const cleanedText = strippedText.replace(/["*]+/g, '');
 
   return cleanedText;
 };
 
-const PAGE_SIZE = 6;
-
-export const fetchPage = async (url: string) => {
+export const fetchPage = async (url: string): Promise<UdemyCoursesResponse> => {
   const response = await fetch(url, {
     method: 'GET',
     headers: {
@@ -84,33 +86,56 @@ export const fetchPage = async (url: string) => {
   return await response.json();
 };
 
-// export default async function getAllReviewsForCourse(courseId: string) {
-//   const allReviews = [];
-//   let nextPage = `https://www.udemy.com/api-2.0/courses/${courseId}/reviews/?page=1&page_size=100&fields[course_review]=rating,content`;
+export default async function getAllReviewsForCourse(
+  courseId: string
+): Promise<string[]> {
+  try {
+    const firstPageData = await fetchReviewsForCoursePage(
+      generatePageUrl(courseId, 1)
+    );
+    const totalPages = Math.ceil(firstPageData.count / 100);
 
-//   while (nextPage) {
-//     const response = await fetch(nextPage, {
-//       method: 'GET',
-//       headers: {
-//         Authorization: 'Basic ' + btoa(API_KEY),
-//         'Content-Type': 'application/json',
-//       },
-//     });
+    const pagePromises = Array.from({ length: totalPages - 1 }, (_, i) =>
+      fetchReviewsForCoursePage(generatePageUrl(courseId, i + 2))
+    );
+    const allPagesData = await Promise.all([
+      Promise.resolve(firstPageData),
+      ...pagePromises,
+    ]);
+    const allReviews = allPagesData.flatMap((pageData) =>
+      pageData.results.reduce((acc: string[], review) => {
+        if (review?.content) {
+          acc.push(review.content);
+        }
+        return acc;
+      }, [])
+    );
 
-//     const data = await response.json();
-//     data.results = data.results.reduce((acc: string[], review: any) => {
-//       if (review.content !== '') {
-//         acc.push(review.content);
-//       }
-//       return acc;
-//     }, []);
+    return allReviews;
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    throw error;
+  }
+}
 
-//     if (data.results && data.results.length > 0) {
-//       allReviews.push(...data.results);
-//     }
+const generatePageUrl = (courseId: string, page: number) =>
+  `https://www.udemy.com/api-2.0/courses/${courseId}/reviews/?page=${page}&page_size=100&fields[course_review]=rating,content`;
 
-//     nextPage = data.next;
-//   }
+// Utility function to fetch a page of reviews
+const fetchReviewsForCoursePage = async (
+  url: string
+): Promise<UdemyCourseReviewsResponse> => {
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Authorization: 'Basic ' + btoa(API_KEY),
+      'Content-Type': 'application/json',
+    },
+  });
 
-//   return allReviews;
-// }
+  if (!response.ok) {
+    throw new Error(`Request failed with status: ${response.status}`);
+  }
+
+  return response.json();
+};

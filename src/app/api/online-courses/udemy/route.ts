@@ -1,4 +1,6 @@
-import { getAllCourses } from '@server/online-courses/udemy/utils';
+import getAllReviewsForCourse, {
+  getAllCourses,
+} from '@server/online-courses/udemy/utils';
 
 export async function GET(request: Request) {
   const url = new URL(request.url); // Assuming your server is running on http://localhost:3000
@@ -12,42 +14,19 @@ export async function GET(request: Request) {
 
   const courses = await getAllCourses(fieldsParameterForTheAIALgo, subject);
 
+  const fetchReviewsPromises = courses.map((course) =>
+    getAllReviewsForCourse(course.id.toString()).then((reviews) => {
+      course.reviews = reviews;
+    })
+  );
+
+  try {
+    await Promise.all(fetchReviewsPromises);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    // Optionally, you might want to send a response with an error status/code
+    return Response.json({ error: 'Failed to fetch reviews' }, { status: 500 });
+  }
+
   return Response.json(courses);
-
-  //   for (const course of courses) {
-  //     const courseId = course.id;
-  //     const reviews = await getAllReviewsForCourse(courseId);
-  //     course.reviews = reviews;
-  //   }
-
-  // export default async function getAllReviewsForCourse(courseId: string) {
-  //   const allReviews = [];
-  //   let nextPage = `https://www.udemy.com/api-2.0/courses/${courseId}/reviews/?page=1&page_size=100&fields[course_review]=rating,content`;
-
-  //   while (nextPage) {
-  //     const response = await fetch(nextPage, {
-  //       method: 'GET',
-  //       headers: {
-  //         Authorization: 'Basic ' + btoa(API_KEY),
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     const data = await response.json();
-  //     data.results = data.results.reduce((acc, review) => {
-  //       if (review.content !== '') {
-  //         acc.push(review.content);
-  //       }
-  //       return acc;
-  //     }, []);
-
-  //     if (data.results && data.results.length > 0) {
-  //       allReviews.push(...data.results);
-  //     }
-
-  //     nextPage = data.next;
-  //   }
-
-  //   return allReviews;
-  // }
 }

@@ -4,7 +4,7 @@ import React from 'react';
 export default function Navbar() {
   const theme = useMantineTheme();
   return (
-    <Group w={'100%'} justify="space-between" h={'60px'} pl={'40'} pr={'40'}>
+    <Group w={'100%'} justify="space-between" h={60} pl={40} pr={40}>
       <Text
         style={(theme) => ({
           color: theme.colors.purple,

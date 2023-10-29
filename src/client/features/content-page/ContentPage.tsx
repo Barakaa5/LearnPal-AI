@@ -58,7 +58,7 @@ export default function ContentPage({ subject }) {
   }, [courses, books, movies, podcasts]);
 
   return (
-    <Stack align="center" h={'100vh'} gap={'0'}>
+    <Stack align="center" h={'100vh'} gap={0}>
       <Navbar />
       {subject}
       {loading ? (

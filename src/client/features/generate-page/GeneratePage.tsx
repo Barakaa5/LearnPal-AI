@@ -22,7 +22,7 @@ import Navbar from '../../components/Navbar/Navbar';
 const SuggestionCard = ({ subject, imgSrc }) => {
   const theme = useMantineTheme();
   return (
-    <Paper radius={'lg'} h={'240px'} w={'240px'} shadow="md" p="lg">
+    <Paper radius={'lg'} h={240} w={240} shadow="md" p="lg">
       <Stack h="100%" justify="space-around" align="center">
         <Text size="26px" fw={'900'}>
           {subject}

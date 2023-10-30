@@ -135,7 +135,7 @@ export default function LoginPage() {
           </Button>
           <Group w={'210px'} justify="space-between">
             <ActionIcon
-              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+              onClick={() => signIn('google', { callbackUrl: '/generate' })}
               variant="transparent"
               size={'xl'}
             >

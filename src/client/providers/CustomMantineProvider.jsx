@@ -7,6 +7,7 @@ const manrope = Manrope({ subsets: ['latin'], weight: '300' });
 const theme = createTheme({
   colors: {
     purple: ['#925FE2'],
+    white: ['#ffffff'],
     lightPurple: ['#BC9FEB'],
   },
   fontFamily: manrope.style.fontFamily,

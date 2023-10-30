@@ -1,5 +1,4 @@
 import { Button, Group, Text, useMantineTheme } from '@mantine/core';
-import React from 'react';
 
 export default function Navbar() {
   const theme = useMantineTheme();
@@ -30,7 +29,6 @@ export default function Navbar() {
       </Group>
       <Group>
         <Button color={theme.colors.purple[0]}>Log In</Button>
-        {/* <Button>Sign Up</Button> */}
       </Group>
     </Group>
   );

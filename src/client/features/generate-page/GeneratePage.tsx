@@ -43,14 +43,14 @@ export default function GeneratePage() {
   return (
     <Stack align="center" h={'100vh'} gap={'0'}>
       <Navbar />
-      <Box w={'100%'} pl={'40px'} pr={'40px'} mb={'20px'}>
+      <Box w={'100%'} pl={'40px'} pr={'40px'} mb={'20px'} h={'40%'}>
         <BackgroundImage
-          h={'300px'}
+          h={'100%'}
           src={'/books-cover.jpg'}
           style={{ borderRadius: '20px' }}
         >
           <Stack h="100%" justify="center" align="center">
-            <Text fw={700} size="30px" c="#fff">
+            <Text fw={700} size="30px" c={theme.colors.white[0]}>
               What do you wish to learn today?
             </Text>
             <TextInput

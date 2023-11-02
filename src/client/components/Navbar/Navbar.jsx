@@ -3,7 +3,7 @@ import { Button, Group, Text, useMantineTheme } from '@mantine/core';
 export default function Navbar() {
   const theme = useMantineTheme();
   return (
-    <Group w={'100%'} justify="space-between" h={60} pl={40} pr={40}>
+    <Group w={'100%'} justify="space-between" h={60}>
       <Text
         style={(theme) => ({
           color: theme.colors.purple,

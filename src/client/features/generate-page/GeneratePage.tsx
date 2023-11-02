@@ -16,7 +16,7 @@ import {
 import { IconSearch } from '@tabler/icons-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 
 const SuggestionCard = ({ subject, imgSrc }) => {
@@ -41,9 +41,9 @@ export default function GeneratePage() {
   const [input, setInput] = useState('');
   const router = useRouter();
   return (
-    <Stack align="center" h={'100vh'} gap={'0'}>
+    <Stack align="center" pl={'40px'} pr={'40px'} h={'100vh'} gap={'0'}>
       <Navbar />
-      <Box w={'100%'} pl={'40px'} pr={'40px'} mb={'20px'} h={'40%'}>
+      <Box w={'100%'} mb={'20px'} h={'40%'}>
         <BackgroundImage
           h={'100%'}
           src={'/books-cover.jpg'}
@@ -79,7 +79,7 @@ export default function GeneratePage() {
           </Stack>
         </BackgroundImage>
       </Box>
-      <Box mb={'30px'} w={'100%'} pl={'40px'} pr={'40px'}>
+      <Box mb={'30px'} w={'100%'}>
         <Group
           bg={theme.colors.lightPurple[0]}
           w={'100%'}
@@ -116,7 +116,7 @@ export default function GeneratePage() {
           />
         </Group>
       </Box>
-      <Box w={'100%'} pl={'40px'} pr={'40px'}>
+      <Box w={'100%'}>
         <Text mb={'20px'} fw={'700'} size="25px">
           Suggestions:
         </Text>

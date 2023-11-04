@@ -49,6 +49,6 @@ export const getAllSourcesResults = async ({
   const onlineCourses = coursesResponse.data;
   const googleBooks = booksResponse.data;
   const omdbMovies = moviesResponse.data;
-  const podcasts = podcastsResponse.data;
+  const podcasts = podcastsResponse.data.podcasts;
   return { onlineCourses, googleBooks, omdbMovies, podcasts };
 };

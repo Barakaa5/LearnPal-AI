@@ -1,6 +1,7 @@
 'use client';
 import {
   ActionIcon,
+  Autocomplete,
   BackgroundImage,
   Box,
   Button,
@@ -9,15 +10,15 @@ import {
   Select,
   Stack,
   Text,
-  TextInput,
   rem,
   useMantineTheme,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import subjects from '../../constants/subjects';
 
 const SuggestionCard = ({ subject, imgSrc }) => {
   const theme = useMantineTheme();
@@ -53,13 +54,17 @@ export default function GeneratePage() {
             <Text fw={700} size="30px" c={theme.colors.white[0]}>
               What do you wish to learn today?
             </Text>
-            <TextInput
+            <Autocomplete
+              placeholder="Enter a subject"
+              limit={5}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={setInput}
+              data={subjects.filter(
+                (val, index) => subjects.indexOf(val) === index
+              )}
               radius="xl"
               size="l"
               w={'300px'}
-              placeholder="Enter a subject"
               rightSectionWidth={35}
               rightSection={
                 <ActionIcon

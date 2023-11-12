@@ -519,9 +519,9 @@ export default function ContentPage({ subject }) {
 
   useEffect(() => {
     if (
-      courses.length > 0 &&
-      books.length > 0 &&
-      movies.length > 0 &&
+      courses.length > 0 ||
+      books.length > 0 ||
+      movies.length > 0 ||
       podcasts.length > 0
     ) {
       setLoading(false);
@@ -721,6 +721,27 @@ export default function ContentPage({ subject }) {
               ))}
             </Grid>
           )}
+          <Group justify="space-between">
+            <Button
+              onClick={() => setIsPlanOpen(false)}
+              variant="default"
+              size="md"
+            >
+              Exit
+            </Button>
+            <Group>
+              <Button variant="default" size="md">
+                Save
+              </Button>
+              <Button
+                color={theme.colors.purple[0]}
+                size="md"
+                rightSection={<IconArrowBarToRight size={14} />}
+              >
+                Export
+              </Button>
+            </Group>
+          </Group>
         </Stack>
       </Modal>
     </>

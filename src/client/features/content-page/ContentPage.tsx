@@ -536,7 +536,7 @@ export default function ContentPage({ subject }) {
             <Loader color={theme.colors.purple[0]} />
           </Flex>
         ) : (
-          <Flex mt={20} direction="column" gap={'md'} pl={'40px'} pr={'40px'}>
+          <Stack mt={20} gap={'md'} pl={'40px'} pr={'40px'}>
             <Navbar />
             <Box w={'100%'} h={'40%'}>
               <BackgroundImage
@@ -554,43 +554,23 @@ export default function ContentPage({ subject }) {
             <Group justify="space-between">
               <Group w={'40%'} justify="space-between">
                 <Chip.Group multiple value={filters} onChange={setFilters}>
-                  <Chip
-                    color={theme.colors.lightPurple[0]}
-                    variant="filled"
-                    value="courses"
-                    size="lg"
-                  >
-                    Courses
-                  </Chip>
-                  <Divider size="sm" orientation="vertical" />
-                  <Chip
-                    color={theme.colors.lightPurple[0]}
-                    variant="filled"
-                    value="books"
-                    size="lg"
-                  >
-                    Books
-                  </Chip>
-                  <Divider size="sm" orientation="vertical" />
-
-                  <Chip
-                    color={theme.colors.lightPurple[0]}
-                    variant="filled"
-                    value="podcasts"
-                    size="lg"
-                  >
-                    Podcasts
-                  </Chip>
-                  <Divider size="sm" orientation="vertical" />
-
-                  <Chip
-                    color={theme.colors.lightPurple[0]}
-                    variant="filled"
-                    value="movies"
-                    size="lg"
-                  >
-                    Movies
-                  </Chip>
+                  {['Courses', 'Books', 'Podcasts', 'Movies'].map(
+                    (contentType, index, arr) => (
+                      <>
+                        <Chip
+                          color={theme.colors.lightPurple[0]}
+                          variant="filled"
+                          value={contentType.toLowerCase()}
+                          size="lg"
+                        >
+                          {contentType}
+                        </Chip>
+                        {index !== arr.length - 1 ? (
+                          <Divider size="sm" orientation="vertical" />
+                        ) : null}
+                      </>
+                    )
+                  )}
                 </Chip.Group>
               </Group>
 
@@ -676,7 +656,7 @@ export default function ContentPage({ subject }) {
                 </Grid>
               </Stack>
             )}
-          </Flex>
+          </Stack>
         )}
       </Stack>
       <Modal

@@ -78,7 +78,7 @@ export default function LoginPage() {
             size="lg"
             fw={700}
           >
-            Syllabus.ai
+            LearnPal.ai
           </Text>
         </Box>
         <Stack h={'70%'} align="center">

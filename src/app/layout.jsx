@@ -6,7 +6,7 @@ import SessionProvider from '../client/providers/SessionProvider';
 import { authOptions } from './api/auth/[...nextauth]/options';
 
 export const metadata = {
-  title: 'Syllabus.ai',
+  title: 'LearnPal.ai',
   description: 'I have followed setup instructions carefully ',
 };
 

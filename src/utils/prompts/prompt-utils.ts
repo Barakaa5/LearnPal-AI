@@ -1,7 +1,7 @@
 export const promptForInitialUserInput = (userInput: string) => {
   const prompt = `Based on the user's input: "${userInput}", you are tasked with analyzing and understanding the general subject the user wants to study, as well as gauging their level of expertise or understanding in the topic.
 
-The application, Syllabus AI, works with various APIs to suggest movies, books, online courses, and podcasts relevant to the user's interest. These APIs include UDEMY for online courses, Google for books, an additional LLM for movie recommendations, and a podcasts API for podcast recommendations.
+The application, LearnPal.ai, works with various APIs to suggest movies, books, online courses, and podcasts relevant to the user's interest. These APIs include UDEMY for online courses, Google for books, an additional LLM for movie recommendations, and a podcasts API for podcast recommendations.
 
 For each API, the topic to be queried may slightly differ based on the nature and utility of the content being sought:
 - For books (via Google API), the focus might be on topics that are enriching and educational. Consider whether the user is a beginner or advanced in the subject, and tailor the suggestion to be accessible based on their level.

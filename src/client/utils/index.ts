@@ -39,16 +39,16 @@ export const getAllSourcesResults = async ({
           subject: moviesSubject,
         },
       }),
-      axios.get(`http://localhost:3000/api/podcasts/listen-notes`, {
-        params: {
-          subject: podcastsSubject,
-        },
-      }),
+      // axios.get(`http://localhost:3000/api/podcasts/listen-notes`, {
+      //   params: {
+      //     subject: podcastsSubject,
+      //   },
+      // }),
     ]);
 
   const onlineCourses = coursesResponse.data;
   const googleBooks = booksResponse.data;
   const omdbMovies = moviesResponse.data;
-  const podcasts = podcastsResponse.data;
-  return { onlineCourses, googleBooks, omdbMovies, podcasts };
+  // const podcasts = podcastsResponse.data;
+  return { onlineCourses, googleBooks, omdbMovies, podcasts: [] };
 };

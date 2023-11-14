@@ -22,7 +22,7 @@ export const getAllSourcesResults = async ({
   onlineCoursesSubject: string;
   podcastsSubject: string;
 }) => {
-  const [coursesResponse, booksResponse, moviesResponse, podcastsResponse] =
+  const [coursesResponse, booksResponse, moviesResponse, youtubeResponse] =
     await Promise.all([
       axios.get(`http://localhost:3000/api/online-courses/udemy`, {
         params: {
@@ -39,6 +39,11 @@ export const getAllSourcesResults = async ({
           subject: moviesSubject,
         },
       }),
+      axios.get(`http://localhost:3000/api/youtube`, {
+        params: {
+          subject: 'barcelona',
+        },
+      }),
       // axios.get(`http://localhost:3000/api/podcasts/listen-notes`, {
       //   params: {
       //     subject: podcastsSubject,
@@ -49,6 +54,14 @@ export const getAllSourcesResults = async ({
   const onlineCourses = coursesResponse.data;
   const googleBooks = booksResponse.data;
   const omdbMovies = moviesResponse.data;
+  const youtubeVideos = youtubeResponse.data;
+
   // const podcasts = podcastsResponse.data;
-  return { onlineCourses, googleBooks, omdbMovies, podcasts: [] };
+  return {
+    onlineCourses,
+    googleBooks,
+    omdbMovies,
+    podcasts: [],
+    youtubeVideos,
+  };
 };

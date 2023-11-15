@@ -1,6 +1,7 @@
 'use client';
 import {
   ActionIcon,
+  Autocomplete,
   BackgroundImage,
   Box,
   Button,
@@ -9,7 +10,6 @@ import {
   Select,
   Stack,
   Text,
-  TextInput,
   rem,
   useMantineTheme,
 } from '@mantine/core';
@@ -18,9 +18,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
+import subjects from '../../constants/subjects';
 
 const SuggestionCard = ({ subject, imgSrc }) => {
   const theme = useMantineTheme();
+  const router = useRouter();
   return (
     <Paper radius={'lg'} h={240} w={240} shadow="md" p="lg">
       <Stack h="100%" justify="space-around" align="center">
@@ -28,7 +30,11 @@ const SuggestionCard = ({ subject, imgSrc }) => {
           {subject}
         </Text>
         <Image alt="subject-icon" width={'64'} height={'64'} src={imgSrc} />
-        <Button variant="outline" color={theme.colors.purple[0]}>
+        <Button
+          onClick={() => router.push(`/content/${subject}`)}
+          variant="outline"
+          color={theme.colors.purple[0]}
+        >
           Try!
         </Button>
       </Stack>
@@ -41,9 +47,9 @@ export default function GeneratePage() {
   const [input, setInput] = useState('');
   const router = useRouter();
   return (
-    <Stack align="center" h={'100vh'} gap={'0'}>
+    <Stack align="center" pl={'40px'} pr={'40px'} h={'100vh'} gap={'0'}>
       <Navbar />
-      <Box w={'100%'} pl={'40px'} pr={'40px'} mb={'20px'} h={'40%'}>
+      <Box w={'100%'} mb={'20px'} h={'40%'}>
         <BackgroundImage
           h={'100%'}
           src={'/books-cover.jpg'}
@@ -53,13 +59,17 @@ export default function GeneratePage() {
             <Text fw={700} size="30px" c={theme.colors.white[0]}>
               What do you wish to learn today?
             </Text>
-            <TextInput
+            <Autocomplete
+              placeholder="Enter a subject"
+              limit={5}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={setInput}
+              data={subjects.filter(
+                (val, index) => subjects.indexOf(val) === index
+              )}
               radius="xl"
               size="l"
               w={'300px'}
-              placeholder="Enter a subject"
               rightSectionWidth={35}
               rightSection={
                 <ActionIcon
@@ -79,7 +89,7 @@ export default function GeneratePage() {
           </Stack>
         </BackgroundImage>
       </Box>
-      <Box mb={'30px'} w={'100%'} pl={'40px'} pr={'40px'}>
+      <Box mb={'30px'} w={'100%'}>
         <Group
           bg={theme.colors.lightPurple[0]}
           w={'100%'}
@@ -116,13 +126,13 @@ export default function GeneratePage() {
           />
         </Group>
       </Box>
-      <Box w={'100%'} pl={'40px'} pr={'40px'}>
+      <Box w={'100%'}>
         <Text mb={'20px'} fw={'700'} size="25px">
           Suggestions:
         </Text>
         <Group justify="space-around">
           <SuggestionCard subject="Spanish" imgSrc="/icons_spain.png" />
-          <SuggestionCard subject="Web-Dev" imgSrc="/icons_web-dev.png" />
+          <SuggestionCard subject="Javascript" imgSrc="/icons_web-dev.png" />
           <SuggestionCard subject="Physics" imgSrc="/icons_physics.png" />
           <SuggestionCard subject="Drawing" imgSrc="/icons_drawing.svg" />
           <SuggestionCard subject="Chinese" imgSrc="/icons_china.png" />

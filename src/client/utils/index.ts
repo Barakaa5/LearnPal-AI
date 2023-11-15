@@ -16,11 +16,13 @@ export const getAllSourcesResults = async ({
   booksSubject,
   onlineCoursesSubject,
   podcastsSubject,
+  youtubeSubject,
 }: {
   moviesSubject: string;
   booksSubject: string;
   onlineCoursesSubject: string;
   podcastsSubject: string;
+  youtubeSubject: string;
 }) => {
   const [coursesResponse, booksResponse, moviesResponse, youtubeResponse] =
     await Promise.all([
@@ -41,7 +43,7 @@ export const getAllSourcesResults = async ({
       }),
       axios.get(`http://localhost:3000/api/youtube`, {
         params: {
-          subject: 'barcelona',
+          subject: youtubeSubject,
         },
       }),
       // axios.get(`http://localhost:3000/api/podcasts/listen-notes`, {

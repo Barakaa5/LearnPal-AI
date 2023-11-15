@@ -22,7 +22,6 @@ export const searchYoutubeVideo = async (
     const response = await axios.get<YouTubeApiResponse>(url, { params });
 
     const parsedYoutubeData = parsedYoutubeDataResponse(response.data);
-    console.log('parsedYoutubeData', parsedYoutubeData);
 
     return parsedYoutubeData;
   } catch (error) {

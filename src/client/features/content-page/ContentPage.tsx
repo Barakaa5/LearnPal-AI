@@ -32,20 +32,23 @@ import {
   IconThumbUp,
 } from '@tabler/icons-react';
 import { GoogleBookType } from '@type/books/google-books';
+import { OmdbMovieType } from '@type/movies/omdb';
+import { UdemyCourseType } from '@type/online-courses/udemy';
 import { PodcastType } from '@type/podcasts/listen-notes';
-import { OmdbMovieType } from '@types/movies/omdb';
-import { UdemyCourseType } from '@types/online-courses/udemy';
+import { YouTubeVideo } from '@type/youtube';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 
-export default function ContentPage({ subject }) {
+export default function ContentPage({ subject }: { subject: string }) {
   const theme = useMantineTheme();
   const router = useRouter();
   const [courses, setCourses] = useState<UdemyCourseType[]>([]);
   const [books, setBooks] = useState<GoogleBookType[]>([]);
   const [movies, setMovies] = useState<OmdbMovieType[]>([]);
   const [podcasts, setPodcasts] = useState<PodcastType[]>([]);
+  const [youTubeVideos, setYouTubeVideos] = useState<YouTubeVideo[]>([]);
+
   const [plan, setPlan] = useState({
     books: [],
     courses: [],
@@ -496,18 +499,25 @@ export default function ContentPage({ subject }) {
         podcastsSubject,
       } = await getAllSourcesSubjects(subject);
 
-      const { onlineCourses, googleBooks, omdbMovies, podcasts } =
-        await getAllSourcesResults({
-          moviesSubject,
-          booksSubject,
-          onlineCoursesSubject,
-          podcastsSubject,
-        });
+      const {
+        onlineCourses,
+        googleBooks,
+        omdbMovies,
+        podcasts,
+        youtubeVideos,
+      } = await getAllSourcesResults({
+        moviesSubject,
+        booksSubject,
+        onlineCoursesSubject,
+        podcastsSubject,
+        youtubeSubject: subject,
+      });
 
       setCourses(onlineCourses);
       setBooks(googleBooks);
       setMovies(omdbMovies);
       setPodcasts(podcasts);
+      setYouTubeVideos(youtubeVideos);
     } catch (error) {
       console.error(error);
     }

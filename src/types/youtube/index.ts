@@ -5,6 +5,13 @@ export type YouTubeVideo = {
   thumbnail: string;
   channelTitle: string;
   url: string;
+  viewCount: string;
+  likeCount: string;
+  dislikeCount: string;
+  commentCount: string;
+  duration: string;
+  channelSubscribers: string;
+  channelTotalViews: string;
 };
 
 export type YouTubeApiResponse = {

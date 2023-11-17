@@ -1,15 +1,29 @@
+import { GoogleBookType } from '@type/books/google-books';
+import { OmdbMovieType } from '@type/movies/omdb';
+import { UdemyCourseType } from '@type/online-courses/udemy';
+import { PodcastType } from '@type/podcasts/listen-notes';
+import { YouTubeVideo } from '@type/youtube';
 import { promptForInitialUserInput } from '@utils/prompts/prompt-utils';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+
+const BASE_URL = 'http://localhost:3000/api';
 
 export const getAllSourcesSubjects = async (userInput: string) => {
   const initialPrompt = promptForInitialUserInput(userInput);
 
-  const palmResponse = await axios.post(`http://localhost:3000/api/plamLLM`, {
+  const palmResponse = await axios.post(`${BASE_URL}/plamLLM`, {
     prompt: initialPrompt,
   });
 
   return palmResponse.data;
 };
+
+const axiosGetRequest = (path: string, subjectValue: string) =>
+  axios.get(`${BASE_URL}/${path}`, { params: { subject: subjectValue } });
+
+const processResponse = (
+  response: PromiseSettledResult<AxiosResponse<unknown, unknown>>
+) => (response.status === 'fulfilled' ? response.value.data : []);
 
 export const getAllSourcesResults = async ({
   moviesSubject,
@@ -24,46 +38,19 @@ export const getAllSourcesResults = async ({
   podcastsSubject: string;
   youtubeSubject: string;
 }) => {
-  const [coursesResponse, booksResponse, moviesResponse, youtubeResponse] =
-    await Promise.all([
-      axios.get(`http://localhost:3000/api/online-courses/udemy`, {
-        params: {
-          subject: onlineCoursesSubject,
-        },
-      }),
-      axios.get(`http://localhost:3000/api/books/google-books`, {
-        params: {
-          subject: booksSubject,
-        },
-      }),
-      axios.get(`http://localhost:3000/api/movies/OMDB`, {
-        params: {
-          subject: moviesSubject,
-        },
-      }),
-      axios.get(`http://localhost:3000/api/youtube`, {
-        params: {
-          subject: youtubeSubject,
-        },
-      }),
-      // axios.get(`http://localhost:3000/api/podcasts/listen-notes`, {
-      //   params: {
-      //     subject: podcastsSubject,
-      //   },
-      // }),
-    ]);
+  const responses = await Promise.allSettled([
+    axiosGetRequest('online-courses/udemy', onlineCoursesSubject),
+    axiosGetRequest('books/google-books', booksSubject),
+    axiosGetRequest('movies/OMDB', moviesSubject),
+    axiosGetRequest('youtube', youtubeSubject),
+    axiosGetRequest('podcasts/listen-notes', podcastsSubject),
+  ]);
 
-  const onlineCourses = coursesResponse.data;
-  const googleBooks = booksResponse.data;
-  const omdbMovies = moviesResponse.data;
-  const youtubeVideos = youtubeResponse.data;
-
-  // const podcasts = podcastsResponse.data;
   return {
-    onlineCourses,
-    googleBooks,
-    omdbMovies,
-    podcasts: [],
-    youtubeVideos,
+    onlineCourses: processResponse(responses[0]) as UdemyCourseType[],
+    googleBooks: processResponse(responses[1]) as GoogleBookType[],
+    omdbMovies: processResponse(responses[2]) as OmdbMovieType[],
+    youtubeVideos: processResponse(responses[3]) as YouTubeVideo[],
+    podcasts: processResponse(responses[4]) as PodcastType,
   };
 };

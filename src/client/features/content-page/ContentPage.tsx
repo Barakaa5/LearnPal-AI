@@ -20,6 +20,7 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core';
+import { PodcastResponse } from '@server/podcasts/listen-notes/type';
 import {
   IconArrowBarToRight,
   IconBook,
@@ -46,10 +47,15 @@ export default function ContentPage({ subject }: { subject: string }) {
   const [courses, setCourses] = useState<UdemyCourseType[]>([]);
   const [books, setBooks] = useState<GoogleBookType[]>([]);
   const [movies, setMovies] = useState<OmdbMovieType[]>([]);
-  const [podcasts, setPodcasts] = useState<PodcastType[]>([]);
+  const [podcasts, setPodcasts] = useState<PodcastResponse[]>([]);
   const [youTubeVideos, setYouTubeVideos] = useState<YouTubeVideo[]>([]);
 
-  const [plan, setPlan] = useState({
+  const [plan, setPlan] = useState<{
+    courses: UdemyCourseType[];
+    books: GoogleBookType[];
+    movies: OmdbMovieType[];
+    podcasts: PodcastResponse[];
+  }>({
     books: [],
     courses: [],
     podcasts: [],
@@ -134,7 +140,7 @@ export default function ContentPage({ subject }: { subject: string }) {
     }
   };
 
-  const CourseCard = ({ course }) => {
+  const CourseCard = ({ course }: { course: UdemyCourseType }) => {
     return (
       <Card
         style={{ maxWidth: '300px', minHeight: '500px' }}
@@ -237,7 +243,7 @@ export default function ContentPage({ subject }: { subject: string }) {
     );
   };
 
-  const BookCard = ({ book }) => {
+  const BookCard = ({ book }: { book: GoogleBookType }) => {
     return (
       <Card withBorder style={{ maxWidth: '300px' }} shadow="sm" padding="xl">
         <Card.Section>
@@ -321,7 +327,7 @@ export default function ContentPage({ subject }: { subject: string }) {
     );
   };
 
-  const PodcastCard = ({ podcast }) => {
+  const PodcastCard = ({ podcast }: { podcast: PodcastResponse }) => {
     return (
       <Card withBorder style={{ maxWidth: '300px' }} shadow="sm" padding="xl">
         <Card.Section>
@@ -396,7 +402,7 @@ export default function ContentPage({ subject }: { subject: string }) {
     );
   };
 
-  const MovieCard = ({ movie }) => {
+  const MovieCard = ({ movie }: { movie: OmdbMovieType }) => {
     return (
       <Card withBorder style={{ maxWidth: '300px' }} shadow="sm" padding="xl">
         <Card.Section>
@@ -516,7 +522,7 @@ export default function ContentPage({ subject }: { subject: string }) {
       setCourses(onlineCourses);
       setBooks(googleBooks);
       setMovies(omdbMovies);
-      setPodcasts(podcasts);
+      setPodcasts(podcasts.podcasts);
       setYouTubeVideos(youtubeVideos);
     } catch (error) {
       console.error(error);
@@ -572,6 +578,7 @@ export default function ContentPage({ subject }: { subject: string }) {
                           variant="filled"
                           value={contentType.toLowerCase()}
                           size="lg"
+                          key={contentType}
                         >
                           {contentType}
                         </Chip>
@@ -628,7 +635,7 @@ export default function ContentPage({ subject }: { subject: string }) {
                       key={book.title}
                       span={{ base: 12, md: 4, lg: 2 }}
                     >
-                      <BookCard book={book} />
+                      <BookCard book={book} key={book.ISBN_13} />
                     </Grid.Col>
                   ))}
                 </Grid>
@@ -638,13 +645,13 @@ export default function ContentPage({ subject }: { subject: string }) {
               <Stack>
                 <Title order={2}>Podcasts</Title>
                 <Grid>
-                  {podcasts.map((podcast) => (
+                  {podcasts?.map((podcast) => (
                     <Grid.Col
                       h={450}
                       key={podcast.id}
                       span={{ base: 12, md: 4, lg: 2 }}
                     >
-                      <PodcastCard podcast={podcast} />
+                      <PodcastCard podcast={podcast} key={podcast.id} />
                     </Grid.Col>
                   ))}
                 </Grid>
@@ -660,7 +667,7 @@ export default function ContentPage({ subject }: { subject: string }) {
                       key={movie.imdbID}
                       span={{ base: 12, md: 4, lg: 2 }}
                     >
-                      <MovieCard movie={movie} />
+                      <MovieCard movie={movie} key={movie.imdbID} />
                     </Grid.Col>
                   ))}
                 </Grid>
@@ -691,11 +698,11 @@ export default function ContentPage({ subject }: { subject: string }) {
                 </Grid.Col>
               ))}
               {plan.books.map((book: GoogleBookType) => (
-                <Grid.Col key={book.title} span={{ base: 12, md: 6, lg: 3 }}>
+                <Grid.Col key={book.ISBN_13} span={{ base: 12, md: 6, lg: 3 }}>
                   <BookCard book={book} />
                 </Grid.Col>
               ))}
-              {plan.podcasts.map((podcast: PodcastType) => (
+              {plan.podcasts?.map((podcast) => (
                 <Grid.Col
                   key={podcast.id}
                   style={{ minWidth: '200px' }}

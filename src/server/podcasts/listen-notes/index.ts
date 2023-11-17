@@ -13,7 +13,6 @@ export const fetchPodcastsFromListenNotes = async (
       params: {
         q: subject,
         page_size: 10,
-
         type: typeOfResults,
       },
       headers: {

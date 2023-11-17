@@ -2,28 +2,34 @@ import { fetchPodcastsFromListenNotes } from '@server/podcasts/listen-notes';
 import {
   EpisodeResponse,
   PodcastResponse,
-} from '../../../../server/podcasts/listen-notes/type';
+} from '@server/podcasts/listen-notes/type';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const subject = url.searchParams.get('subject');
   if (!subject) {
-    return Response.json([]);
+    return new Response(JSON.stringify([]));
   }
 
   try {
-    const [podcastResults, episodeResults] = await Promise.all([
+    const [podcastResponse, episodeResponse] = await Promise.allSettled([
       fetchPodcastsFromListenNotes(subject, 'podcast'),
       fetchPodcastsFromListenNotes(subject, 'episode'),
     ]);
 
     const listenNotesResults = {
-      podcasts: podcastResults as PodcastResponse,
-      episodes: episodeResults as EpisodeResponse,
+      podcasts:
+        podcastResponse.status === 'fulfilled'
+          ? (podcastResponse.value as PodcastResponse)
+          : [],
+      episodes:
+        episodeResponse.status === 'fulfilled'
+          ? (episodeResponse.value as EpisodeResponse)
+          : [],
     };
 
-    return Response.json(listenNotesResults);
+    return new Response(JSON.stringify(listenNotesResults));
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    return new Response(JSON.stringify(error));
   }
 }

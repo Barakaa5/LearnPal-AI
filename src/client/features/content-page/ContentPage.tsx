@@ -25,6 +25,7 @@ import {
   IconArrowBarToRight,
   IconBook,
   IconCalendarDue,
+  IconEye,
   IconMinus,
   IconMoodSad,
   IconMovie,
@@ -87,6 +88,26 @@ export default function ContentPage({ subject }: { subject: string }) {
   const formatCourseDate = (dateString) => {
     const date = new Date(dateString);
     return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+  };
+
+  const formatYouTubeDuration = (duration) => {
+    const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+
+    const hours = match[1] ? parseInt(match[1], 10) : 0;
+    let minutes = match[2] ? parseInt(match[2], 10) : 0;
+    let seconds = match[3] ? parseInt(match[3], 10) : 0;
+
+    // Pad minutes and seconds with leading zero if needed
+    // @ts-ignore
+    minutes = minutes < 10 && hours > 0 ? '0' + minutes : minutes;
+    // @ts-ignore
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    if (hours > 0) {
+      return hours + ':' + minutes + ':' + seconds;
+    } else {
+      return minutes + ':' + seconds;
+    }
   };
 
   const isInPlan = (item, type) => {
@@ -527,31 +548,26 @@ export default function ContentPage({ subject }: { subject: string }) {
           </Badge>
           <Divider />
           <Group>
+            <IconEye width="20px" />
+            <Text c="dimmed" size="sm">
+              Views: {video.viewCount}
+            </Text>
+          </Group>
+          <Group>
             <IconThumbUp width="20px" />
             <Text c="dimmed" size="sm">
-              {/* Rating: {movie.Metascore} */}
+              Likes: {video.likeCount}
             </Text>
           </Group>
           <Group>
-            <IconCalendarDue width={'20px'} />
+            <IconMovie width={'20px'} />
             <Text c="dimmed" size="sm">
-              {/* Year: {movie.Year} */}
-            </Text>
-          </Group>
-          <Group>
-            <IconMovie width="20px" />
-            <Text
-              style={{ maxWidth: '80%' }}
-              // truncate="end"
-              c="dimmed"
-              size="sm"
-            >
-              {/* Genre: {movie.Genre} */}
+              Duration: {formatYouTubeDuration(video.duration)}
             </Text>
           </Group>
           <Divider />
-          {/* <Group mt="lg" m={'auto'}>
-            {!isInPlan(movie, 'movie') ? (
+          <Group mt="lg" m={'auto'}>
+            {!isInPlan(video, 'youtube') ? (
               <Button
                 color={theme.colors.purple[0]}
                 size="compact-sm"
@@ -560,7 +576,7 @@ export default function ContentPage({ subject }: { subject: string }) {
                 onClick={() =>
                   setPlan((prevPlan) => ({
                     ...prevPlan,
-                    movies: [...prevPlan.movies, movie],
+                    youtube: [...prevPlan.youtube, video],
                   }))
                 }
               >
@@ -573,12 +589,12 @@ export default function ContentPage({ subject }: { subject: string }) {
                 leftSection={<IconMinus size={14} />}
                 radius="md"
                 onClick={() => {
-                  const modifiedMovies = plan.movies.filter(
-                    (planMovie) => planMovie.imdbID != movie.imdbID
+                  const modifiedYoutube = plan.youtube.filter(
+                    (planVideo) => planVideo.url !== video.url
                   );
                   setPlan((prevPlan) => ({
                     ...prevPlan,
-                    movies: modifiedMovies,
+                    youtube: modifiedYoutube,
                   }));
                 }}
               >
@@ -592,10 +608,11 @@ export default function ContentPage({ subject }: { subject: string }) {
               radius="md"
               component="a"
               target="_blank"
+              href={video.url}
             >
               Watch
             </Button>
-          </Group> */}
+          </Group>
         </Stack>
       </Card>
     );
@@ -782,23 +799,7 @@ export default function ContentPage({ subject }: { subject: string }) {
               <Stack>
                 <Title order={2}>Youtube Videos</Title>
                 <Grid>
-                  {youTubeVideos.map((video) => (
-                    <Grid.Col
-                      h={550}
-                      key={video.title}
-                      span={{ base: 12, md: 4, lg: 2 }}
-                    >
-                      <YoutubeCard video={video} />
-                    </Grid.Col>
-                  ))}
-                </Grid>
-              </Stack>
-            )}
-            {filters.includes('youtube') && (
-              <Stack>
-                <Title order={2}>Youtube Videos</Title>
-                <Grid>
-                  {youTubeVideos.map((video) => (
+                  {youTubeVideos?.map((video) => (
                     <Grid.Col
                       h={550}
                       key={video.title}
@@ -851,6 +852,11 @@ export default function ContentPage({ subject }: { subject: string }) {
               {plan.movies.map((movie: OmdbMovieType) => (
                 <Grid.Col key={movie.imdbID} span={{ base: 12, md: 6, lg: 3 }}>
                   <MovieCard movie={movie} />
+                </Grid.Col>
+              ))}
+              {plan.youtube.map((video: YouTubeVideo) => (
+                <Grid.Col key={video.url} span={{ base: 12, md: 6, lg: 3 }}>
+                  <YoutubeCard video={video} />
                 </Grid.Col>
               ))}
             </Grid>

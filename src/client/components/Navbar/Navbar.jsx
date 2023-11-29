@@ -32,8 +32,14 @@ export default function Navbar() {
         <Button color="black" variant="transparent">
           Explore
         </Button>
-        <Button disabled color="black" variant="transparent">
-          Blog
+        <Button
+          onClick={() => {
+            router.push('/plans');
+          }}
+          color="black"
+          variant="transparent"
+        >
+          My Plans
         </Button>
         <Button color="black" variant="transparent">
           About

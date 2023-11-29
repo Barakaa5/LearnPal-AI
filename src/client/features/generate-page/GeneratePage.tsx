@@ -74,9 +74,7 @@ export default function GeneratePage() {
               limit={5}
               value={input}
               onChange={setInput}
-              data={subjects.filter(
-                (val, index) => subjects.indexOf(val) === index
-              )}
+              data={Object.keys(subjects)}
               radius="xl"
               size="l"
               w={'300px'}

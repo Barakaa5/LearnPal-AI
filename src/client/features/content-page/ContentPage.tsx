@@ -1,6 +1,7 @@
 'use client';
 
 import { getAllSourcesResults, getAllSourcesSubjects } from '@client/utils';
+import { addPlanToUser } from '@client/utils/firestore';
 import {
   Flex,
   Grid,

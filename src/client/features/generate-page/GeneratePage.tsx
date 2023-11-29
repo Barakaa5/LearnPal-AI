@@ -1,4 +1,5 @@
 'use client';
+import { addUserDocOnSignIn } from '@client/utils/firestore';
 import {
   ActionIcon,
   Autocomplete,
@@ -14,9 +15,10 @@ import {
   useMantineTheme,
 } from '@mantine/core';
 import { IconSearch } from '@tabler/icons-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import subjects from '../../constants/subjects';
 
@@ -46,6 +48,14 @@ export default function GeneratePage() {
   const theme = useMantineTheme();
   const [input, setInput] = useState('');
   const router = useRouter();
+  const session = useSession();
+
+  useEffect(() => {
+    if (session?.data?.user) {
+      const { user } = session.data;
+      user?.email && addUserDocOnSignIn(user.email, user);
+    }
+  }, [session]);
   return (
     <Stack align="center" pl={'40px'} pr={'40px'} h={'100vh'} gap={'0'}>
       <Navbar />

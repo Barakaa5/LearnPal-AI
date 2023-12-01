@@ -25,6 +25,7 @@ import {
   IconArrowBarToRight,
   IconBook,
   IconCalendarDue,
+  IconEye,
   IconMinus,
   IconMoodSad,
   IconMovie,
@@ -36,7 +37,7 @@ import { GoogleBookType } from '@type/books/google-books';
 import { OmdbMovieType } from '@type/movies/omdb';
 import { UdemyCourseType } from '@type/online-courses/udemy';
 import { PodcastType } from '@type/podcasts/listen-notes';
-import { YouTubeVideo } from '@type/youtube';
+import { YouTubeApiResponse, YouTubeVideo } from '@type/youtube';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
@@ -50,33 +51,33 @@ export default function ContentPage({ subject }: { subject: string }) {
   const [podcasts, setPodcasts] = useState<PodcastResponse[]>([]);
   const [youTubeVideos, setYouTubeVideos] = useState<YouTubeVideo[]>([]);
 
+  const contentTypes = ['courses', 'books', 'podcasts', 'movies', 'youtube'];
+
   const [plan, setPlan] = useState<{
     courses: UdemyCourseType[];
     books: GoogleBookType[];
     movies: OmdbMovieType[];
     podcasts: PodcastResponse[];
+    youtube: YouTubeApiResponse[];
   }>({
     books: [],
     courses: [],
     podcasts: [],
     movies: [],
+    youtube: [],
   });
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isPlanEmpty, setIsPlanEmpty] = useState(true);
-  const [filters, setFilters] = useState([
-    'courses',
-    'books',
-    'podcasts',
-    'movies',
-  ]);
+  const [filters, setFilters] = useState(contentTypes);
 
   useEffect(() => {
     if (
       plan.courses.length === 0 &&
       plan.books.length === 0 &&
       plan.movies.length === 0 &&
-      plan.podcasts.length === 0
+      plan.podcasts.length === 0 &&
+      plan.youtube.length === 0
     ) {
       setIsPlanEmpty(true);
     } else {
@@ -89,12 +90,32 @@ export default function ContentPage({ subject }: { subject: string }) {
     return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
   };
 
+  const formatYouTubeDuration = (duration) => {
+    const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+
+    const hours = match[1] ? parseInt(match[1], 10) : 0;
+    let minutes = match[2] ? parseInt(match[2], 10) : 0;
+    let seconds = match[3] ? parseInt(match[3], 10) : 0;
+
+    // Pad minutes and seconds with leading zero if needed
+    // @ts-ignore
+    minutes = minutes < 10 && hours > 0 ? '0' + minutes : minutes;
+    // @ts-ignore
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    if (hours > 0) {
+      return hours + ':' + minutes + ':' + seconds;
+    } else {
+      return minutes + ':' + seconds;
+    }
+  };
+
   const isInPlan = (item, type) => {
-    if (!['course', 'book', 'podcast', 'movie'].includes(type)) {
+    if (!contentTypes.includes(type)) {
       return false;
     } else {
       switch (type) {
-        case 'course':
+        case 'courses':
           if (
             plan.courses.some(
               (planItem: UdemyCourseType) => planItem.id === item.id
@@ -104,7 +125,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           } else {
             return false;
           }
-        case 'book':
+        case 'books':
           if (
             plan.books.some(
               (planItem: GoogleBookType) => planItem.title === item.title
@@ -114,7 +135,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           } else {
             return false;
           }
-        case 'podcast':
+        case 'podcasts':
           if (
             plan.podcasts.some(
               (planItem: PodcastType) => planItem.id === item.id
@@ -124,10 +145,20 @@ export default function ContentPage({ subject }: { subject: string }) {
           } else {
             return false;
           }
-        case 'movie':
+        case 'movies':
           if (
             plan.movies.some(
               (planItem: OmdbMovieType) => planItem.imdbID === item.imdbID
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        case 'youtube':
+          if (
+            plan.youtube.some(
+              (planItem: YouTubeVideo) => planItem.title === item.title
             )
           ) {
             return true;
@@ -192,7 +223,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           </Group>
           <Divider />
           <Group mt={'lg'} m={'auto'}>
-            {!isInPlan(course, 'course') ? (
+            {!isInPlan(course, 'courses') ? (
               <Button
                 color={theme.colors.purple[0]}
                 size="compact-sm"
@@ -276,7 +307,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           </Group>
           <Divider />
           <Group mt={'lg'} m={'auto'}>
-            {!isInPlan(book, 'book') ? (
+            {!isInPlan(book, 'books') ? (
               <Button
                 color={theme.colors.purple[0]}
                 size="compact-sm"
@@ -351,7 +382,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           </Text>
           <Divider />
           <Group mt={'lg'} m={'auto'}>
-            {!isInPlan(podcast, 'podcast') ? (
+            {!isInPlan(podcast, 'podcasts') ? (
               <Button
                 color={theme.colors.purple[0]}
                 size="compact-sm"
@@ -446,7 +477,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           </Group>
           <Divider />
           <Group mt="lg" m={'auto'}>
-            {!isInPlan(movie, 'movie') ? (
+            {!isInPlan(movie, 'movies') ? (
               <Button
                 color={theme.colors.purple[0]}
                 size="compact-sm"
@@ -487,6 +518,97 @@ export default function ContentPage({ subject }: { subject: string }) {
               radius="md"
               component="a"
               target="_blank"
+            >
+              Watch
+            </Button>
+          </Group>
+        </Stack>
+      </Card>
+    );
+  };
+
+  const YoutubeCard = ({ video }) => {
+    console.log(video);
+    return (
+      <Card withBorder style={{ maxWidth: '300px' }} shadow="sm" padding="xl">
+        <Card.Section>
+          <Image
+            src={video.thumbnail}
+            fit="contain"
+            h={200}
+            alt={video.Title}
+            fallbackSrc="https://placehold.co/300x400?text=No%20Image%20Found"
+          />
+        </Card.Section>
+
+        <Stack justify="space-between" gap={'xs'} mt="md">
+          <Text fw={500}>{video.title}</Text>
+          <Badge color={theme.colors.purple[0]} variant="light">
+            By {video.channelTitle}
+          </Badge>
+          <Divider />
+          <Group>
+            <IconEye width="20px" />
+            <Text c="dimmed" size="sm">
+              Views: {video.viewCount}
+            </Text>
+          </Group>
+          <Group>
+            <IconThumbUp width="20px" />
+            <Text c="dimmed" size="sm">
+              Likes: {video.likeCount}
+            </Text>
+          </Group>
+          <Group>
+            <IconMovie width={'20px'} />
+            <Text c="dimmed" size="sm">
+              Duration: {formatYouTubeDuration(video.duration)}
+            </Text>
+          </Group>
+          <Divider />
+          <Group mt="lg" m={'auto'}>
+            {!isInPlan(video, 'youtube') ? (
+              <Button
+                color={theme.colors.purple[0]}
+                size="compact-sm"
+                leftSection={<IconPlus size={14} />}
+                radius="md"
+                onClick={() =>
+                  setPlan((prevPlan) => ({
+                    ...prevPlan,
+                    youtube: [...prevPlan.youtube, video],
+                  }))
+                }
+              >
+                Add
+              </Button>
+            ) : (
+              <Button
+                color={theme.colors.purple[0]}
+                size="compact-sm"
+                leftSection={<IconMinus size={14} />}
+                radius="md"
+                onClick={() => {
+                  const modifiedYoutube = plan.youtube.filter(
+                    (planVideo) => planVideo.url !== video.url
+                  );
+                  setPlan((prevPlan) => ({
+                    ...prevPlan,
+                    youtube: modifiedYoutube,
+                  }));
+                }}
+              >
+                Remove
+              </Button>
+            )}
+            <Button
+              color={theme.colors.purple[0]}
+              variant="outline"
+              size="compact-sm"
+              radius="md"
+              component="a"
+              target="_blank"
+              href={video.url}
             >
               Watch
             </Button>
@@ -673,6 +795,22 @@ export default function ContentPage({ subject }: { subject: string }) {
                 </Grid>
               </Stack>
             )}
+            {filters.includes('youtube') && (
+              <Stack>
+                <Title order={2}>Youtube Videos</Title>
+                <Grid>
+                  {youTubeVideos?.map((video) => (
+                    <Grid.Col
+                      h={550}
+                      key={video.title}
+                      span={{ base: 12, md: 4, lg: 2 }}
+                    >
+                      <YoutubeCard video={video} />
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
           </Stack>
         )}
       </Stack>
@@ -714,6 +852,11 @@ export default function ContentPage({ subject }: { subject: string }) {
               {plan.movies.map((movie: OmdbMovieType) => (
                 <Grid.Col key={movie.imdbID} span={{ base: 12, md: 6, lg: 3 }}>
                   <MovieCard movie={movie} />
+                </Grid.Col>
+              ))}
+              {plan.youtube.map((video: YouTubeVideo) => (
+                <Grid.Col key={video.url} span={{ base: 12, md: 6, lg: 3 }}>
+                  <YoutubeCard video={video} />
                 </Grid.Col>
               ))}
             </Grid>

@@ -6,9 +6,11 @@ import {
   Button,
   Card,
   Divider,
+  Flex,
   Grid,
   Group,
   Image,
+  Loader,
   Stack,
   Text,
   useMantineTheme,
@@ -105,18 +107,24 @@ export default function PlansPage() {
     <Stack align="center" pl={'40px'} pr={'40px'} h={'100vh'} gap={'0'}>
       <Navbar />
 
-      <Grid
-        style={{ overflowY: 'scroll' }}
-        w={'100%'}
-        justify="flex-start"
-        mt="20px"
-      >
-        {plans.map((plan) => (
-          <Grid.Col h={530} span={{ base: 12, md: 6, lg: 3 }}>
-            <PlanCard plan={plan} />
-          </Grid.Col>
-        ))}
-      </Grid>
+      {plans.length > 0 ? (
+        <Grid
+          style={{ overflowY: 'scroll' }}
+          w={'100%'}
+          justify="flex-start"
+          mt="20px"
+        >
+          {plans.map((plan) => (
+            <Grid.Col h={530} span={{ base: 12, md: 6, lg: 3 }}>
+              <PlanCard plan={plan} />
+            </Grid.Col>
+          ))}
+        </Grid>
+      ) : (
+        <Flex justify="center" align="center" h="100%">
+          <Loader color={theme.colors.purple[0]} />
+        </Flex>
+      )}
     </Stack>
   );
 }

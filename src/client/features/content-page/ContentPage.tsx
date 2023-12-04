@@ -17,6 +17,7 @@ import { YouTubeVideo } from '@type/youtube';
 import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 import ContentFilterNavigation from './components/ContentFilterNavigation';
+import PlanModal from './components/PlanModal';
 import BookCard from './components/cards/BookCard';
 import CourseCard from './components/cards/CourseCard';
 import MovieCard from './components/cards/MovieCard';
@@ -36,6 +37,8 @@ export default function ContentPage({ subject }: { subject: string }) {
   const contentTypes = ['courses', 'books', 'podcasts', 'movies', 'youtube'];
 
   const [filters, setFilters] = useState(contentTypes);
+  const [isPlanOpen, setIsPlanOpen] = useState(false);
+  const [isPlanEmpty, setIsPlanEmpty] = useState(true);
   const [plan, setPlan] = useState<PlanType>({
     books: [],
     courses: [],
@@ -97,129 +100,141 @@ export default function ContentPage({ subject }: { subject: string }) {
     );
   } else {
     return (
-      <Stack align="center" h={'100vh'} gap={0}>
-        <Stack mt={20} gap={'md'} pl={'40px'} pr={'40px'}>
-          <Navbar />
-          <ContentFilterNavigation
-            filters={filters}
-            subject={subject}
-            plan={plan}
-            setPlan={setPlan}
-            setFilters={setFilters}
-          />
+      <>
+        <Stack align="center" h={'100vh'} gap={0}>
+          <Stack mt={20} gap={'md'} pl={'40px'} pr={'40px'}>
+            <Navbar />
+            <ContentFilterNavigation
+              filters={filters}
+              subject={subject}
+              plan={plan}
+              setPlan={setPlan}
+              setFilters={setFilters}
+              setIsPlanEmpty={setIsPlanEmpty}
+              setIsPlanOpen={setIsPlanOpen}
+            />
 
-          {filters.includes('courses') && (
-            <Stack align="start">
-              <Title order={2}>Courses</Title>
-              <Grid align="stretch">
-                {courses.map((course) => (
-                  <Grid.Col
-                    h={530}
-                    key={course.id}
-                    span={{ base: 12, md: 4, lg: 2 }}
-                  >
-                    <CourseCard
+            {filters.includes('courses') && (
+              <Stack align="start">
+                <Title order={2}>Courses</Title>
+                <Grid align="stretch">
+                  {courses.map((course) => (
+                    <Grid.Col
+                      h={530}
                       key={course.id}
-                      course={course}
-                      plan={plan}
-                      isInPlan={isInPlan(course, 'courses', plan)}
-                      setPlan={setPlan}
-                    />
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Stack>
-          )}
-          {filters.includes('books') && (
-            <Stack>
-              <Title order={2}>Books</Title>
-              <Grid>
-                {books.map((book) => (
-                  <Grid.Col
-                    h={450}
-                    key={book.title}
-                    span={{ base: 12, md: 4, lg: 2 }}
-                  >
-                    <BookCard
-                      isInPlan={isInPlan(book, 'books', plan)}
-                      setPlan={setPlan}
-                      plan={plan}
-                      book={book}
-                      key={book.ISBN_13}
-                    />
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Stack>
-          )}
-          {filters.includes('podcasts') && (
-            <Stack>
-              <Title order={2}>Podcasts</Title>
-              <Grid>
-                {podcasts?.map((podcast) => (
-                  <Grid.Col
-                    h={450}
-                    key={podcast.id}
-                    span={{ base: 12, md: 4, lg: 2 }}
-                  >
-                    <PodcastCard
-                      isInPlan={isInPlan(podcast, 'podcasts', plan)}
-                      setPlan={setPlan}
-                      plan={plan}
-                      podcast={podcast}
+                      span={{ base: 12, md: 4, lg: 2 }}
+                    >
+                      <CourseCard
+                        key={course.id}
+                        course={course}
+                        plan={plan}
+                        isInPlan={isInPlan(course, 'courses', plan)}
+                        setPlan={setPlan}
+                      />
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
+            {filters.includes('books') && (
+              <Stack>
+                <Title order={2}>Books</Title>
+                <Grid>
+                  {books.map((book) => (
+                    <Grid.Col
+                      h={450}
+                      key={book.title}
+                      span={{ base: 12, md: 4, lg: 2 }}
+                    >
+                      <BookCard
+                        isInPlan={isInPlan(book, 'books', plan)}
+                        setPlan={setPlan}
+                        plan={plan}
+                        book={book}
+                        key={book.ISBN_13}
+                      />
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
+            {filters.includes('podcasts') && (
+              <Stack>
+                <Title order={2}>Podcasts</Title>
+                <Grid>
+                  {podcasts?.map((podcast) => (
+                    <Grid.Col
+                      h={450}
                       key={podcast.id}
-                    />
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Stack>
-          )}
-          {filters.includes('movies') && (
-            <Stack>
-              <Title order={2}>Movies</Title>
-              <Grid>
-                {movies.map((movie) => (
-                  <Grid.Col
-                    h={550}
-                    key={movie.imdbID}
-                    span={{ base: 12, md: 4, lg: 2 }}
-                  >
-                    <MovieCard
-                      isInPlan={isInPlan(movie, 'movies', plan)}
-                      setPlan={setPlan}
-                      plan={plan}
-                      movie={movie}
+                      span={{ base: 12, md: 4, lg: 2 }}
+                    >
+                      <PodcastCard
+                        isInPlan={isInPlan(podcast, 'podcasts', plan)}
+                        setPlan={setPlan}
+                        plan={plan}
+                        podcast={podcast}
+                        key={podcast.id}
+                      />
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
+            {filters.includes('movies') && (
+              <Stack>
+                <Title order={2}>Movies</Title>
+                <Grid>
+                  {movies.map((movie) => (
+                    <Grid.Col
+                      h={550}
                       key={movie.imdbID}
-                    />
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Stack>
-          )}
-          {filters.includes('youtube') && (
-            <Stack>
-              <Title order={2}>Youtube Videos</Title>
-              <Grid>
-                {youTubeVideos?.map((video) => (
-                  <Grid.Col
-                    h={550}
-                    key={video.title}
-                    span={{ base: 12, md: 4, lg: 2 }}
-                  >
-                    <YoutubeCard
-                      video={video}
-                      isInPlan={isInPlan(video, 'youtube', plan)}
-                      setPlan={setPlan}
-                      plan={plan}
+                      span={{ base: 12, md: 4, lg: 2 }}
+                    >
+                      <MovieCard
+                        isInPlan={isInPlan(movie, 'movies', plan)}
+                        setPlan={setPlan}
+                        plan={plan}
+                        movie={movie}
+                        key={movie.imdbID}
+                      />
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
+            {filters.includes('youtube') && (
+              <Stack>
+                <Title order={2}>Youtube Videos</Title>
+                <Grid>
+                  {youTubeVideos?.map((video) => (
+                    <Grid.Col
+                      h={550}
                       key={video.title}
-                    />
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Stack>
-          )}
+                      span={{ base: 12, md: 4, lg: 2 }}
+                    >
+                      <YoutubeCard
+                        video={video}
+                        isInPlan={isInPlan(video, 'youtube', plan)}
+                        setPlan={setPlan}
+                        plan={plan}
+                        key={video.title}
+                      />
+                    </Grid.Col>
+                  ))}
+                </Grid>
+              </Stack>
+            )}
+          </Stack>
         </Stack>
-      </Stack>
+        <PlanModal
+          plan={plan}
+          setPlan={setPlan}
+          isPlanEmpty={isPlanEmpty}
+          setIsPlanEmpty={setIsPlanEmpty}
+          isPlanOpen={isPlanOpen}
+          setIsPlanOpen={setIsPlanOpen}
+        />
+      </>
     );
   }
 }

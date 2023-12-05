@@ -52,7 +52,17 @@ export async function getUser(email: string) {
     const docSnap = await getDoc(doc(db, 'users', email));
     return docSnap.data();
   } catch (e) {
-    console.error('Error adding document: ', e);
+    console.error('Error fetching document: ', e);
+  }
+}
+
+export async function getPlan(id: string) {
+  try {
+    // Reference to your collection, change 'your_collection' to your actual collection name
+    const docSnap = await getDoc(doc(db, 'plans', id));
+    return docSnap.data();
+  } catch (e) {
+    console.error('Error fetching document: ', e);
   }
 }
 
@@ -93,7 +103,10 @@ export async function addNewPlan(email: string, plan: any) {
     } else {
       await updateDoc(userDocRef, { plans: [planDocRefId] });
     }
-    console.log('User updated successfully');
+
+    console.log('Plan added successfully');
+
+    return planDocRefId;
   } catch (error) {
     console.error('Error updating user: ', error);
   }

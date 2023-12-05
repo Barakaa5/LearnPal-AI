@@ -23,11 +23,13 @@ import {
   IconVideo,
 } from '@tabler/icons-react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
 
 export default function PlansPage() {
   const session = useSession();
+  const router = useRouter();
   const theme = useMantineTheme();
   const [plans, setPlans] = useState([]);
   const [userEmail, setUserEmail] = useState('');
@@ -98,7 +100,12 @@ export default function PlansPage() {
             </Text>
           </Group>
           <Divider />
-          <Button color={theme.colors.purple[0]}>View</Button>
+          <Button
+            onClick={() => router.push(`/plan/${plan.id}`)}
+            color={theme.colors.purple[0]}
+          >
+            View
+          </Button>
         </Stack>
       </Card>
     );

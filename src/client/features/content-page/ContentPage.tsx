@@ -233,6 +233,7 @@ export default function ContentPage({ subject }: { subject: string }) {
           setIsPlanEmpty={setIsPlanEmpty}
           isPlanOpen={isPlanOpen}
           setIsPlanOpen={setIsPlanOpen}
+          subject={subject}
         />
       </>
     );

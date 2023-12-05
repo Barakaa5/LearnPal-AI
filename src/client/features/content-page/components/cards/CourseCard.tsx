@@ -21,7 +21,7 @@ import {
 } from '@tabler/icons-react';
 import { UdemyCourseType } from '@type/online-courses/udemy';
 import { Dispatch, SetStateAction } from 'react';
-import { PlanType } from '../../ContentPage';
+import { PlanType } from '../../types';
 
 const formatCourseDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -33,11 +33,15 @@ export default function CourseCard({
   isInPlan,
   plan,
   setPlan,
+  disableAddRemove,
+  showType,
 }: {
   isInPlan: boolean;
   course: UdemyCourseType;
   plan: PlanType;
   setPlan: Dispatch<SetStateAction<PlanType>>;
+  disableAddRemove: boolean;
+  showType: boolean;
 }) {
   const theme = useMantineTheme();
 
@@ -61,6 +65,15 @@ export default function CourseCard({
       <Stack justify="space-between" gap={'xs'} mt="md">
         <Text fw={500}>{course.title}</Text>
         <Group>
+          {showType && (
+            <Badge
+              style={{ maxWidth: '75%' }}
+              color={theme.colors.purple[0]}
+              variant="light"
+            >
+              Course
+            </Badge>
+          )}
           <Badge
             style={{ maxWidth: '75%' }}
             color={theme.colors.purple[0]}
@@ -68,7 +81,7 @@ export default function CourseCard({
           >
             By: {course.author.name}
           </Badge>
-          <Avatar src={course.author.image_100x100} size="sm" />
+          {!showType && <Avatar src={course.author.image_100x100} size="sm" />}
         </Group>
         <Divider />
         <Group>
@@ -98,11 +111,15 @@ export default function CourseCard({
               size="compact-sm"
               leftSection={<IconPlus size={14} />}
               radius="md"
-              onClick={() =>
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  courses: [...prevPlan.courses, course],
-                }))
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () =>
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        courses: [...prevPlan.courses, course],
+                      }))
+                  : () => {}
               }
             >
               Add
@@ -113,15 +130,20 @@ export default function CourseCard({
               size="compact-sm"
               leftSection={<IconMinus size={14} />}
               radius="md"
-              onClick={() => {
-                const modifiedCourses = plan.courses.filter(
-                  (planCourse) => planCourse.id != course.id
-                );
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  courses: modifiedCourses,
-                }));
-              }}
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () => {
+                      const modifiedCourses = plan.courses.filter(
+                        (planCourse) => planCourse.id != course.id
+                      );
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        courses: modifiedCourses,
+                      }));
+                    }
+                  : () => {}
+              }
             >
               Remove
             </Button>

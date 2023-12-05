@@ -14,6 +14,9 @@ const subjects = {
   Biology: {
     icon: 'https://example.com/icons/biology.png',
   },
+  Chinese: {
+    icon: '/icons_china.png',
+  },
   Medicine: {
     icon: 'https://example.com/icons/medicine.png',
   },

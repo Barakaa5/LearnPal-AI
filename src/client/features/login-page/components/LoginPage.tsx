@@ -8,6 +8,7 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   Group,
   Stack,
   Text,
@@ -62,15 +63,15 @@ export default function LoginPage() {
         </BackgroundImage>
       </Box>
       <Stack h={'100vh'} w={'67%'} display={'flex'} align="center">
-        <Box
+        <Flex
           w={'100%'}
-          display={'flex'}
+          justify={'flex-end'}
+          align={'center'}
+          gap={'10px'}
           style={{
             padding: '10px 20px 0 0',
-            justifyContent: 'flex-end',
           }}
         >
-          {/* temporary until we design a logo */}
           <Text
             style={(theme) => ({
               color: theme.colors.purple,
@@ -80,7 +81,8 @@ export default function LoginPage() {
           >
             LearnPal.ai
           </Text>
-        </Box>
+          <Image alt="logo" src={'/learnpal_logo.svg'} width={60} height={60} />
+        </Flex>
         <Stack h={'70%'} align="center">
           <Box style={{ marginBottom: '70px' }} variant="h2">
             <Title
@@ -135,7 +137,9 @@ export default function LoginPage() {
           </Button>
           <Group w={'210px'} justify="space-between">
             <ActionIcon
-              onClick={() => signIn('google', { callbackUrl: '/generate' })}
+              onClick={() => {
+                signIn('google', { callbackUrl: '/generate' });
+              }}
               variant="transparent"
               size={'xl'}
             >

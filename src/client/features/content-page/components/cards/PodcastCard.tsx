@@ -21,11 +21,15 @@ export default function PodcastCard({
   isInPlan,
   plan,
   setPlan,
+  disableAddRemove,
+  showType,
 }: {
   podcast: PodcastResponse;
   isInPlan: boolean;
   plan: PlanType;
   setPlan: Dispatch<SetStateAction<PlanType>>;
+  disableAddRemove: boolean;
+  showType: boolean;
 }) {
   const theme = useMantineTheme();
   return (
@@ -42,9 +46,16 @@ export default function PodcastCard({
 
       <Stack justify="space-between" gap={'xs'} mt="md">
         <Text fw={500}>{podcast.title_original}</Text>
-        <Badge color={theme.colors.purple[0]} variant="light">
-          {podcast.total_episodes} episodes
-        </Badge>
+        <Group>
+          {showType && (
+            <Badge color={theme.colors.purple[0]} variant="light">
+              Podcast
+            </Badge>
+          )}
+          <Badge color={theme.colors.purple[0]} variant="light">
+            {podcast.total_episodes} episodes
+          </Badge>
+        </Group>
         <Divider />
         <Text c="dimmed" size="sm">
           {podcast.listen_score}
@@ -57,15 +68,20 @@ export default function PodcastCard({
               size="compact-sm"
               leftSection={<IconMinus size={14} />}
               radius="md"
-              onClick={() => {
-                const modifiedPodcasts = plan.podcasts.filter(
-                  (planPodcast) => planPodcast.id != podcast.id
-                );
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  podcasts: modifiedPodcasts,
-                }));
-              }}
+              disabled={disableAddRemove}
+              onClick={
+                disableAddRemove
+                  ? () => {}
+                  : () => {
+                      const modifiedPodcasts = plan.podcasts.filter(
+                        (planPodcast) => planPodcast.id != podcast.id
+                      );
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        podcasts: modifiedPodcasts,
+                      }));
+                    }
+              }
             >
               Remove
             </Button>
@@ -75,11 +91,15 @@ export default function PodcastCard({
               size="compact-sm"
               leftSection={<IconPlus size={14} />}
               radius="md"
-              onClick={() =>
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  podcasts: [...prevPlan.podcasts, podcast],
-                }))
+              disabled={disableAddRemove}
+              onClick={
+                disableAddRemove
+                  ? () => {}
+                  : () =>
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        podcasts: [...prevPlan.podcasts, podcast],
+                      }))
               }
             >
               Add

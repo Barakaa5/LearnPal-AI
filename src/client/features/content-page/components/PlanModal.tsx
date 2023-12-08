@@ -1,13 +1,17 @@
 'use client';
 
+import { addNewPlan } from '@client/utils/firestore';
 import {
   Button,
+  CopyButton,
   Flex,
   Grid,
   Group,
+  Loader,
   Modal,
   Stack,
   Text,
+  TextInput,
   Title,
   useMantineTheme,
 } from '@mantine/core';
@@ -16,7 +20,8 @@ import { GoogleBookType } from '@type/books/google-books';
 import { OmdbMovieType } from '@type/movies/omdb';
 import { UdemyCourseType } from '@type/online-courses/udemy';
 import { YouTubeVideo } from '@type/youtube';
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { PlanType } from '../types';
 import { isInPlan } from '../utils';
 import BookCard from './cards/BookCard';
@@ -32,6 +37,7 @@ export default function PlanModal({
   isPlanOpen,
   setIsPlanEmpty,
   setIsPlanOpen,
+  subject,
 }: {
   plan: PlanType;
   setPlan: Dispatch<SetStateAction<PlanType>>;
@@ -39,8 +45,13 @@ export default function PlanModal({
   isPlanOpen: boolean;
   setIsPlanEmpty: Dispatch<SetStateAction<boolean>>;
   setIsPlanOpen: Dispatch<SetStateAction<boolean>>;
+  subject: string;
 }) {
   const theme = useMantineTheme();
+  const session = useSession();
+  const [savePlanLodaing, setSavePlanLoading] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [exportPlanId, setExportPlanId] = useState(null);
 
   useEffect(() => {
     if (
@@ -55,6 +66,34 @@ export default function PlanModal({
       setIsPlanEmpty(false);
     }
   }, [plan]);
+
+  const savePlan = async () => {
+    if (session?.data?.user.email) {
+      setSavePlanLoading(true);
+      const newId = await addNewPlan(session.data.user.email, {
+        ...plan,
+        subject,
+        date: new Date(),
+        createdBy: session?.data?.user.email,
+      });
+      setSavePlanLoading(false);
+      setPlan({
+        books: [],
+        courses: [],
+        podcasts: [],
+        movies: [],
+        youtube: [],
+      });
+      setIsPlanOpen(false);
+      return newId;
+    }
+  };
+
+  const handleExport = async () => {
+    const newPlanId = await savePlan();
+    setExportPlanId(newPlanId);
+    setIsExportModalOpen(true);
+  };
 
   return (
     <>
@@ -143,12 +182,13 @@ export default function PlanModal({
               Exit
             </Button>
             <Group>
-              <Button variant="default" size="md">
+              <Button onClick={savePlan} variant="default" size="md">
                 Save
               </Button>
               <Button
                 color={theme.colors.purple[0]}
                 size="md"
+                onClick={() => handleExport()}
                 rightSection={<IconArrowBarToRight size={14} />}
               >
                 Export
@@ -156,6 +196,39 @@ export default function PlanModal({
             </Group>
           </Group>
         </Stack>
+      </Modal>
+      <Modal
+        opened={isExportModalOpen}
+        onClose={() => {
+          setExportPlanId(null);
+          setIsExportModalOpen(false);
+        }}
+        withCloseButton={false}
+        centered
+      >
+        {exportPlanId ? (
+          <Stack>
+            <TextInput value={`http://localhost:3000/plan/${exportPlanId}`} />
+            <CopyButton value={`http://localhost:3000/plan/${exportPlanId}`}>
+              {({ copied, copy }) => (
+                <Button
+                  color={
+                    !copied
+                      ? theme.colors.purple[0]
+                      : theme.colors.lightPurple[0]
+                  }
+                  onClick={copy}
+                >
+                  {copied ? 'Copied' : 'Copy'}
+                </Button>
+              )}
+            </CopyButton>
+          </Stack>
+        ) : (
+          <Flex>
+            <Loader />
+          </Flex>
+        )}
       </Modal>
     </>
   );

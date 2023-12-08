@@ -26,11 +26,15 @@ export default function BookCard({
   isInPlan,
   plan,
   setPlan,
+  disableAddRemove,
+  showType,
 }: {
   book: GoogleBookType;
   isInPlan: boolean;
   plan: PlanType;
   setPlan: Dispatch<SetStateAction<PlanType>>;
+  disableAddRemove: boolean;
+  showType: boolean;
 }) {
   const theme = useMantineTheme();
 
@@ -48,9 +52,16 @@ export default function BookCard({
 
       <Stack justify="space-around" mt="md" gap="xs">
         <Text fw={500}>{book.title}</Text>
-        <Badge color={theme.colors.purple[0]} variant="light">
-          By {book.authors}
-        </Badge>
+        <Group>
+          {showType && (
+            <Badge color={theme.colors.purple[0]} variant="light">
+              Book
+            </Badge>
+          )}
+          <Badge color={theme.colors.purple[0]} variant="light">
+            By {book.authors}
+          </Badge>
+        </Group>
         <Divider />
         <Group>
           <IconBook width="20px" />
@@ -72,15 +83,20 @@ export default function BookCard({
               size="compact-sm"
               leftSection={<IconMinus size={14} />}
               radius="md"
-              onClick={() => {
-                const modifiedBooks = plan.books.filter(
-                  (planBook) => planBook.title != book.title
-                );
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  books: modifiedBooks,
-                }));
-              }}
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () => {
+                      const modifiedBooks = plan.books.filter(
+                        (planBook) => planBook.title != book.title
+                      );
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        books: modifiedBooks,
+                      }));
+                    }
+                  : () => {}
+              }
             >
               Remove
             </Button>
@@ -90,11 +106,15 @@ export default function BookCard({
               size="compact-sm"
               leftSection={<IconPlus size={14} />}
               radius="md"
-              onClick={() =>
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  books: [...prevPlan.books, book],
-                }))
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () =>
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        books: [...prevPlan.books, book],
+                      }))
+                  : () => {}
               }
             >
               Add

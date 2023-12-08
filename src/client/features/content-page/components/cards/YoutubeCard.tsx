@@ -44,11 +44,15 @@ export default function YoutubeCard({
   isInPlan,
   plan,
   setPlan,
+  disableAddRemove,
+  showType,
 }: {
   video: YouTubeVideo;
   isInPlan: boolean;
   plan: PlanType;
   setPlan: Dispatch<SetStateAction<PlanType>>;
+  disableAddRemove: boolean;
+  showType: boolean;
 }) {
   const theme = useMantineTheme();
   return (
@@ -65,9 +69,16 @@ export default function YoutubeCard({
 
       <Stack justify="space-between" gap={'xs'} mt="md">
         <Text fw={500}>{video.title}</Text>
-        <Badge color={theme.colors.purple[0]} variant="light">
-          By {video.channelTitle}
-        </Badge>
+        <Group>
+          {showType && (
+            <Badge color={theme.colors.purple[0]} variant="light">
+              Youtube Video
+            </Badge>
+          )}
+          <Badge color={theme.colors.purple[0]} variant="light">
+            By {video.channelTitle}
+          </Badge>
+        </Group>
         <Divider />
         <Group>
           <IconEye width="20px" />
@@ -95,15 +106,20 @@ export default function YoutubeCard({
               size="compact-sm"
               leftSection={<IconMinus size={14} />}
               radius="md"
-              onClick={() => {
-                const modifiedYoutube = plan.youtube.filter(
-                  (planVideo) => planVideo.url !== video.url
-                );
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  youtube: modifiedYoutube,
-                }));
-              }}
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () => {
+                      const modifiedYoutube = plan.youtube.filter(
+                        (planVideo) => planVideo.url !== video.url
+                      );
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        youtube: modifiedYoutube,
+                      }));
+                    }
+                  : () => {}
+              }
             >
               Remove
             </Button>
@@ -113,11 +129,15 @@ export default function YoutubeCard({
               size="compact-sm"
               leftSection={<IconPlus size={14} />}
               radius="md"
-              onClick={() =>
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  youtube: [...prevPlan.youtube, video],
-                }))
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () =>
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        youtube: [...prevPlan.youtube, video],
+                      }))
+                  : () => {}
               }
             >
               Add

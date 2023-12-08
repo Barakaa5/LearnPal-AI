@@ -27,11 +27,15 @@ export default function MovieCard({
   isInPlan,
   plan,
   setPlan,
+  disableAddRemove,
+  showType,
 }: {
   movie: OmdbMovieType;
   isInPlan: boolean;
   plan: PlanType;
   setPlan: Dispatch<SetStateAction<PlanType>>;
+  disableAddRemove: boolean;
+  showType: boolean;
 }) {
   const theme = useMantineTheme();
   return (
@@ -48,9 +52,16 @@ export default function MovieCard({
 
       <Stack justify="space-between" gap={'xs'} mt="md">
         <Text fw={500}>{movie.Title}</Text>
-        <Badge color={theme.colors.purple[0]} variant="light">
-          By {movie.Director}
-        </Badge>
+        <Group>
+          {showType && (
+            <Badge color={theme.colors.purple[0]} variant="light">
+              Movie
+            </Badge>
+          )}
+          <Badge color={theme.colors.purple[0]} variant="light">
+            By {movie.Director}
+          </Badge>
+        </Group>
         <Divider />
         <Group>
           <IconThumbUp width="20px" />
@@ -83,15 +94,20 @@ export default function MovieCard({
               size="compact-sm"
               leftSection={<IconMinus size={14} />}
               radius="md"
-              onClick={() => {
-                const modifiedMovies = plan.movies.filter(
-                  (planMovie) => planMovie.imdbID != movie.imdbID
-                );
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  movies: modifiedMovies,
-                }));
-              }}
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () => {
+                      const modifiedMovies = plan.movies.filter(
+                        (planMovie) => planMovie.imdbID != movie.imdbID
+                      );
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        movies: modifiedMovies,
+                      }));
+                    }
+                  : () => {}
+              }
             >
               Remove
             </Button>
@@ -101,11 +117,15 @@ export default function MovieCard({
               size="compact-sm"
               leftSection={<IconPlus size={14} />}
               radius="md"
-              onClick={() =>
-                setPlan((prevPlan) => ({
-                  ...prevPlan,
-                  movies: [...prevPlan.movies, movie],
-                }))
+              disabled={disableAddRemove}
+              onClick={
+                !disableAddRemove
+                  ? () =>
+                      setPlan((prevPlan) => ({
+                        ...prevPlan,
+                        movies: [...prevPlan.movies, movie],
+                      }))
+                  : () => {}
               }
             >
               Add

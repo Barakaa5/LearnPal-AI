@@ -20,7 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { YouTubeVideo } from '@type/youtube';
 import { Dispatch, SetStateAction } from 'react';
-import { PlanType } from '../../ContentPage';
+import { PlanType } from '../../types';
 
 const formatYouTubeDuration = (duration: string): string => {
   const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);

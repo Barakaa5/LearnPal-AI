@@ -68,7 +68,7 @@ export default function PlanModal({
   }, [plan]);
 
   const savePlan = async () => {
-    if (session?.data?.user.email) {
+    if (session?.data?.user?.email) {
       setSavePlanLoading(true);
       const newId = await addNewPlan(session.data.user.email, {
         ...plan,

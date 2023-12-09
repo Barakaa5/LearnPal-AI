@@ -19,7 +19,7 @@ import {
 } from '@tabler/icons-react';
 import { GoogleBookType } from '@type/books/google-books';
 import { Dispatch, SetStateAction } from 'react';
-import { PlanType } from '../../ContentPage';
+import { PlanType } from '../../types';
 
 export default function BookCard({
   book,

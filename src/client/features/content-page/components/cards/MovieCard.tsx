@@ -20,7 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { OmdbMovieType } from '@type/movies/omdb';
 import { Dispatch, SetStateAction } from 'react';
-import { PlanType } from '../../ContentPage';
+import { PlanType } from '../../types';
 
 export default function MovieCard({
   movie,

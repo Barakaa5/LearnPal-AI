@@ -14,7 +14,7 @@ import {
 import { PodcastResponse } from '@server/podcasts/listen-notes/type';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { Dispatch, SetStateAction } from 'react';
-import { PlanType } from '../../ContentPage';
+import { PlanType } from '../../types';
 
 export default function PodcastCard({
   podcast,

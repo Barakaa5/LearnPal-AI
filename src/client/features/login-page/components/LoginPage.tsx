@@ -1,43 +1,26 @@
 'use client';
-import AppleIcon from '@client/features/login-page/assets/images/icons_apple.svg';
-import FacebookIcon from '@client/features/login-page/assets/images/icons_facebook.svg';
+
 import GoogleIcon from '@client/features/login-page/assets/images/icons_google.svg';
 import {
-  ActionIcon,
   BackgroundImage,
   Box,
   Button,
-  Center,
-  Flex,
   Group,
   Stack,
   Text,
-  TextInput,
   Title,
+  useMantineTheme,
 } from '@mantine/core';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
-import { useState } from 'react';
 
 export default function LoginPage() {
   const heroImageUrl =
     'https://images.unsplash.com/photo-1588702547954-4800ead296ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3553&q=80';
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const handleSubmit = async () => {
-    setIsLoading(true);
-
-    signIn('credentials', {
-      redirect: true, // Set to true to enable automatic redirection
-      email,
-      password,
-    });
-  };
+  const theme = useMantineTheme();
   return (
-    <Box display={'flex'}>
+    <Group justify="space-between">
       <Box
-        h={'100vh'}
         w={'33%'}
         style={(theme) => ({
           backgroundColor: theme.colors.purple,
@@ -54,121 +37,41 @@ export default function LoginPage() {
           }}
           h={'100vh'}
           w={'100%'}
-        >
-          <Center h={'100%'} p="md">
-            <Title c={'white'} order={1}>
-              {/* What do you wish to learn today? */}
-            </Title>
-          </Center>
-        </BackgroundImage>
+        ></BackgroundImage>
       </Box>
-      <Stack h={'100vh'} w={'67%'} display={'flex'} align="center">
-        <Flex
-          w={'100%'}
-          justify={'flex-end'}
-          align={'center'}
-          gap={'10px'}
-          style={{
-            padding: '10px 20px 0 0',
-          }}
-        >
-          <Text
-            style={(theme) => ({
-              color: theme.colors.purple,
-            })}
-            size="lg"
-            fw={700}
-          >
+      <Stack h={'100vh'} align="center" justify="center" m="auto">
+        <Group justify={'flex-end'}>
+          <Text c={theme.colors.purple[0]} size="lg" fw={700}>
             LearnPal.ai
           </Text>
           <Image alt="logo" src={'/learnpal_logo.svg'} width={60} height={60} />
-        </Flex>
-        <Stack h={'70%'} align="center">
-          <Box style={{ marginBottom: '70px' }} variant="h2">
-            <Title
-              style={{
-                margin: 'auto',
-              }}
-              w={'fit-content'}
-              order={1}
-            >
-              Log In
-            </Title>
-          </Box>
-          <TextInput
-            label="Email"
-            placeholder="Enter your email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            styles={{
-              input: { backgroundColor: '#F1F3F5' },
-              root: {
-                marginBottom: '20px',
-                width: '380px',
-              },
-            }}
-          />
-          <TextInput
-            label="Password"
-            placeholder="Enter your password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            styles={{
-              input: { backgroundColor: '#F1F3F5' },
-              root: {
-                marginBottom: '160px',
-                width: '380px',
-              },
-            }}
-          />
+        </Group>
+
+        <Stack align="center" justify="center" mr="auto">
+          <Title>Log In</Title>
+
           <Button
-            variant="filled"
-            size="xl"
-            style={(theme) => ({
-              backgroundColor: theme.colors.purple,
-            })}
-            w={'210px'}
-            onClick={handleSubmit}
-            loading={isLoading}
-          >
-            Login
-          </Button>
-          <Group w={'210px'} justify="space-between">
-            <ActionIcon
-              onClick={() => {
-                signIn('google', { callbackUrl: '/generate' });
-              }}
-              variant="transparent"
-              size={'xl'}
-            >
+            onClick={async () => {
+              try {
+                await signIn('google', { callbackUrl: '/generate' });
+              } catch (error) {
+                console.error('Sign in failed:', error);
+                // Display error message to user
+              }
+            }}
+            style={{
+              border: `1px solid ${theme.colors.purple[0]}`,
+            }}
+            leftSection={
               <Image src={GoogleIcon} alt="GoogleIcon" width={36} height={36} />
-            </ActionIcon>
-            <ActionIcon
-              size={'xl'}
-              disabled
-              variant="transparent"
-              aria-label="Settings"
-            >
-              <Image
-                src={FacebookIcon}
-                alt="facebookIcon"
-                width={36}
-                height={36}
-              />
-            </ActionIcon>
-            <ActionIcon
-              size={'xl'}
-              disabled
-              variant="transparent"
-              aria-label="Settings"
-            >
-              <Image src={AppleIcon} alt="GoogleIcon" width={36} height={36} />
-            </ActionIcon>
-          </Group>
+            }
+            variant="subtle"
+            size={'md'}
+          >
+            Sign in with Google
+          </Button>
         </Stack>
       </Stack>
-    </Box>
+    </Group>
   );
 }

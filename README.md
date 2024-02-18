@@ -11,6 +11,7 @@ LearnPal AI is an innovative platform designed to transform the way individuals 
 - **Authentication**: Secure login and signup functionality to personalize your learning journey.
 - **Material Curation**: Upon choosing a subject, users receive a comprehensive list of learning materials across different formats to study.
 - **Personal Program**: An option to bookmark and organize materials you find beneficial, creating a tailored learning program.
+- **Recommendations for New Subjects**: Offers generic recommendations to inspire users about various subjects to learn. This feature aims to spark curiosity and help users discover new areas of interest.
 
 ### Upcoming Features
 - **Recommendations**: Intelligent suggestions for new subjects to explore based on your interests and learning history.

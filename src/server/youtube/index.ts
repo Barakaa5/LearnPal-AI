@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { YouTubeVideo } from '@type/youtube';
 
-const youtube_api_key = 'AIzaSyC8O7LTAuRcBvBR08tSgM1TwBmIQ6g8lLY';
+const youtube_api_key = process.env.YOUTUBE_API_KEY || '';
 
 const searchUrl = 'https://www.googleapis.com/youtube/v3/search';
 const videoDetailsUrl = 'https://www.googleapis.com/youtube/v3/videos';

@@ -1,5 +1,4 @@
-import React from 'react';
-import LoginPage from '../client/features/login-page/components/LoginPage';
+import { LoginPage } from '@client/features/login-page';
 
 export default function Home() {
   return <LoginPage />;

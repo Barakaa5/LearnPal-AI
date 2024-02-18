@@ -1,8 +1,7 @@
 import { UdemyCourseType } from '@type/online-courses/udemy';
 import { UdemyCourseReviewsResponse, UdemyCoursesResponse } from '../types';
 
-const API_KEY =
-  'fWPtIrK9VNJfxU7WkEaj2glNgE019YbM4i3uaKl0:PURymL5Ii0Ln865psrK5ZkuQhClwmpslsdv2mmJxxXphuljWbZEB7uGWmqdye2Ot7ydF5DsLjGK6w8aT8OPnzYmLouHB1oeAUx6mK2FPHneErPxBjYoWcrIwLCboKZpS'; // Replace with your Udemy API key
+const API_KEY = process.env.UDEMY_API_KEY || '';
 
 const PAGE_SIZE = 6;
 

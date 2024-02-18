@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { TypeOfListenNotesResults } from './type';
 
-const API_KEY = 'b3045b127ed04712b37a5686066d7e20';
+const API_KEY = process.env.LISTEN_NOTES_API_KEY || '';
 
 export const fetchPodcastsFromListenNotes = async (
   subject: string,

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const fetchBooksFromGooleBooks = async (query: string) => {
-  const apiKey = 'AIzaSyBZ3MUOxr_YKN-4DAsoyGj_Aba8yv38NfM';
+  const apiKey = process.env.GOOGLE_BOOKS_API_KEY || '';
   const langRestrict = 'en';
   const apiEndpoint = `https://www.googleapis.com/books/v1/volumes?q=${query}&langRestrict=${langRestrict}&maxResults=6&orderBy=relevance&key=${apiKey}`;
   try {

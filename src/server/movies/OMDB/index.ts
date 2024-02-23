@@ -1,7 +1,7 @@
 import { OmdbMovieType } from '@type/movies/omdb';
 import axios from 'axios';
 
-const api_key = '22ffee94';
+const api_key = process.env.OMDB_API_KEY || '';
 
 const searchMoviesWithOMDB = async (
   title: string
